@@ -6,7 +6,8 @@
 #define IDM_ABOUTBOX					0x0010
 #define IDD_ABOUTBOX					100
 #define IDS_ABOUTBOX					101
-#define IDD_HALLIGALLISERVER_DIALOG				102
+#define IDD_HALLIGALLISERVER_DIALOG		102
+#define IDP_SOCKETS_INIT_FAILED			103
 
 // 다음은 새 개체에 사용할 기본값입니다.
 //

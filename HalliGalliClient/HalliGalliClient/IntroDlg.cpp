@@ -59,8 +59,8 @@ CIntroDlg::CIntroDlg(CWnd* pParent /*=NULL*/)
 void CIntroDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_RADIO_2P, m_Radio2P);
-	DDX_Control(pDX, IDC_RADIO_4P, m_Radio4P);
+	DDX_Control(pDX, IDC_RADIO_2P, m_Radio[RADIO_2P]);
+	DDX_Control(pDX, IDC_RADIO_4P, m_Radio[RADIO_4P]);
 }
 
 BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
@@ -104,6 +104,10 @@ BOOL CIntroDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	/* 라디오 버튼 2인용이 기본으로 선택돼있게 초기화 
+	   둘 다 동시에 체크될 수 없음					*/
+	m_Radio[RADIO_2P].SetCheck(TRUE);
+	m_Radio[RADIO_4P].SetCheck(FALSE);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }

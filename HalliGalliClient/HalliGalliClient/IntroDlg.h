@@ -4,10 +4,11 @@
 
 #pragma once
 
-
 // CIntroDlg 대화 상자
 class CIntroDlg : public CDialogEx
 {
+	enum RADIO_INDEX { RADIO_2P, RADIO_4P, RADIO_END };
+
 // 생성입니다.
 public:
 	CIntroDlg(CWnd* pParent = NULL);	// 표준 생성자입니다.
@@ -33,7 +34,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedRadio2p();
-	CButton m_Radio2P;
 	afx_msg void OnBnClickedRadio4p();
-	CButton m_Radio4P;
+
+public:
+	CButton m_Radio[RADIO_END];
 };

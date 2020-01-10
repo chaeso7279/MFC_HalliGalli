@@ -58,12 +58,18 @@ CIntroDlg::CIntroDlg(CWnd* pParent /*=NULL*/)
 void CIntroDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, IDC_RADIO_2P, m_Radio2P);
+	DDX_Control(pDX, IDC_RADIO_4P, m_Radio4P);
 }
 
 BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDCANCEL, &CIntroDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDOK, &CIntroDlg::OnBnClickedOk)
+	ON_BN_CLICKED(IDC_RADIO_2P, &CIntroDlg::OnBnClickedRadio2p)
+	ON_BN_CLICKED(IDC_RADIO_4P, &CIntroDlg::OnBnClickedRadio4p)
 END_MESSAGE_MAP()
 
 
@@ -152,3 +158,24 @@ HCURSOR CIntroDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+
+void CIntroDlg::OnBnClickedCancel()
+{
+}
+
+void CIntroDlg::OnBnClickedOk()
+{
+}
+
+void CIntroDlg::OnBnClickedRadio2p()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+
+void CIntroDlg::OnBnClickedRadio4p()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}

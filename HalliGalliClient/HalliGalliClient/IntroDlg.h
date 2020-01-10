@@ -31,4 +31,11 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedRadio2p();
+	CButton m_Radio2P;
+	afx_msg void OnBnClickedRadio4p();
+	CButton m_Radio4P;
 };

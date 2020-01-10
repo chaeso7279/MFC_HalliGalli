@@ -20,11 +20,14 @@
     <Filter Include="01. GameDlg">
       <UniqueIdentifier>{7dbd8ce1-d6c1-46cf-9266-b3b5d50caf1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03. ImageManager">
+    <Filter Include="04. ImageManager">
       <UniqueIdentifier>{41cdfc97-b81d-4c9a-a620-73504e578239}</UniqueIdentifier>
     </Filter>
-    <Filter Include="04. Socket">
+    <Filter Include="05. Socket">
       <UniqueIdentifier>{0a70096d-6f7a-4cfd-a8a1-eb95e6e85179}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. ConnectDlg">
+      <UniqueIdentifier>{4fa28d76-1208-415d-81f5-c8dae9e5aafd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -53,10 +56,13 @@
       <Filter>98. Headers</Filter>
     </ClInclude>
     <ClInclude Include="ImageMgr.h">
-      <Filter>03. ImageManager</Filter>
+      <Filter>04. ImageManager</Filter>
     </ClInclude>
     <ClInclude Include="SocCom.h">
-      <Filter>04. Socket</Filter>
+      <Filter>05. Socket</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnectDlg.h">
+      <Filter>03. ConnectDlg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,10 +79,13 @@
       <Filter>01. GameDlg</Filter>
     </ClCompile>
     <ClCompile Include="ImageMgr.cpp">
-      <Filter>03. ImageManager</Filter>
+      <Filter>04. ImageManager</Filter>
     </ClCompile>
     <ClCompile Include="SocCom.cpp">
-      <Filter>04. Socket</Filter>
+      <Filter>05. Socket</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnectDlg.cpp">
+      <Filter>03. ConnectDlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

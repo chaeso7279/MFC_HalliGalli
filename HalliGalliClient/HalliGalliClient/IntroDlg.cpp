@@ -69,6 +69,7 @@ BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_RADIO_2P, &CIntroDlg::OnBnClickedRadio2p)
 	ON_BN_CLICKED(IDC_RADIO_4P, &CIntroDlg::OnBnClickedRadio4p)
+	ON_BN_CLICKED(IDC_BUTTON_CONNECT, &CIntroDlg::OnBnClickedButtonConnect)
 END_MESSAGE_MAP()
 
 
@@ -163,16 +164,26 @@ HCURSOR CIntroDlg::OnQueryDragIcon()
 
 void CIntroDlg::OnBnClickedRadio2p()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	/* 2인용 체크 시 들어오는 함수 */
 }
 
 void CIntroDlg::OnBnClickedRadio4p()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	/* 4인용 체크 시 들어오는 함수 */
+	AfxMessageBox("추후 개발 예정입니다^_^");
+
+	/* 4인용 체크해도 무시하도록 설정 */
+	m_Radio[RADIO_2P].SetCheck(TRUE);
+	m_Radio[RADIO_4P].SetCheck(FALSE);
 }
 
 BOOL CAboutDlg::DestroyWindow()
 {
 	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
 	return CDialogEx::DestroyWindow();
+}
+
+void CIntroDlg::OnBnClickedButtonConnect()
+{
+	/* 접속 버튼 클릭 */
 }

@@ -74,5 +74,6 @@ using namespace std;
 #include "Macro.h"
 
 #include "ImageMgr.h" // 이미지 관리 클래스
+#include <afxcontrolbars.h>
 
 #pragma warning(disable : 4985)

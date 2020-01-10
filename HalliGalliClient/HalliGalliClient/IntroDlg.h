@@ -36,6 +36,8 @@ public:
 	afx_msg void OnBnClickedRadio2p();
 	afx_msg void OnBnClickedRadio4p();
 
+	afx_msg void OnBnClickedButtonConnect(); 
+
 public:
 	CButton m_Radio[RADIO_END];
 };

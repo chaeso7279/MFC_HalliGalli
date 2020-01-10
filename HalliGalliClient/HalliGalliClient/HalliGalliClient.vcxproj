@@ -181,6 +181,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConnectDlg.h" />
     <ClInclude Include="GameDlg.h" />
     <ClInclude Include="HalliGalliClient.h" />
     <ClInclude Include="ImageMgr.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConnectDlg.cpp" />
     <ClCompile Include="GameDlg.cpp" />
     <ClCompile Include="HalliGalliClient.cpp" />
     <ClCompile Include="ImageMgr.cpp" />

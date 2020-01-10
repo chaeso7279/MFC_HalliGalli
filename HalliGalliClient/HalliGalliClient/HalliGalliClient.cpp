@@ -51,6 +51,11 @@ BOOL CHalliGalliClientApp::InitInstance()
 
 	CWinApp::InitInstance();
 
+	if (!AfxSocketInit())
+	{
+		AfxMessageBox(IDP_SOCKETS_INIT_FAILED);
+		return FALSE;
+	}
 
 	AfxEnableControlContainer();
 

@@ -33,14 +33,6 @@
 
 #include <afxcontrolbars.h>     // MFC의 리본 및 컨트롤 막대 지원
 
-
-
-
-
-
-
-
-
 #ifdef _UNICODE
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -51,4 +43,17 @@
 #endif
 #endif
 
+#include <vector>
+#include <list>
+#include <map>
+#include <algorithm>
+#include <fstream>
 
+using namespace std;
+
+#include <afxsock.h>
+
+#define UM_ACCEPT WM_USER+1
+#define UM_RECEIVE WM_USER+2
+
+#pragma warning(disable : 4985)

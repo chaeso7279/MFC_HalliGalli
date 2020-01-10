@@ -51,4 +51,17 @@
 #endif
 #endif
 
+#include <vector>
+#include <list>
+#include <map>
+#include <algorithm>
+#include <fstream>
 
+using namespace std;
+
+#include <afxsock.h>
+
+#define UM_ACCEPT WM_USER+1
+#define UM_RECEIVE WM_USER+2
+
+#pragma warning(disable : 4985)

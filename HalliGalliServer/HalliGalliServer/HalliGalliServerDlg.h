@@ -34,8 +34,8 @@ protected:
 
 
 public:
-	HRESULT Load_Image();
+	HRESULT Load_CardImage(CString strPath = "../../Image/Card/");
 
 public:
-	list<CImage*> m_pImgLst[FRUIT_END]; // 이미지 저장 리스트
+	vector<CImage*> m_vecCardImage[FRUIT_END]; // 카드 이미지 저장 벡터
 };

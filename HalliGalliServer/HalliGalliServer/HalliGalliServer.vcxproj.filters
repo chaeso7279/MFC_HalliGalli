@@ -34,6 +34,9 @@
     <ClInclude Include="targetver.h">
       <Filter>99. Default</Filter>
     </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>98. Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliServer.cpp">

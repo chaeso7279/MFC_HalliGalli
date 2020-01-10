@@ -99,6 +99,10 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	if (FAILED(Load_CardImage()))
+	{
+		AfxMessageBox("카드 이미지 로드 실패");
+	}
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -152,10 +156,55 @@ HCURSOR CHalliGalliServerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-HRESULT CHalliGalliServerDlg::Load_Image()
+HRESULT CHalliGalliServerDlg::Load_CardImage(CString strPath)
 {
-	CFile File;
+	CFileFind File;
+	BOOL bResult = File.FindFile(strPath);
+	while (bResult)
+	{
+		bResult = File.FindNextFile();
 
+		if (File.IsDots())
+			continue;
+		else if (File.IsDirectory())
+			Load_CardImage(File.GetFilePath());
+		else
+		{
+			if (File.IsSystem())
+				continue;
+			
+			CString strTemp = File.GetFilePath();
+			CString strTexName;
+			if (0 < strTemp.ReverseFind('\\'))
+				strTemp = strTemp.Left(strTemp.ReverseFind('\\'));
+			if (0 < strTemp.ReverseFind('\\'))
+				strTexName = strTemp.Left(strTemp.ReverseFind('\\'));
+			
+			if (strTexName == "Back")
+			{
+				CImage* pImage = new CImage;
+				pImage->Load(File.GetFilePath());
 
-	return E_NOTIMPL;
+				m_vecCardImage[FRUIT_BACK].push_back(pImage);
+			}
+			else if (strTexName == "Cherry")
+			{
+				CImage* pImage = new CImage;
+				pImage->Load(File.GetFilePath());
+
+				m_vecCardImage[FRUIT_CHEERY].push_back(pImage);
+			}
+			else if (strTexName == "Pear")
+			{
+				CImage* pImage = new CImage;
+				pImage->Load(File.GetFilePath());
+
+				m_vecCardImage[FRUIT_PEAR].push_back(pImage);
+			}
+		}
+	}
+
+	File.Close();
+
+	return S_OK;
 }

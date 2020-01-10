@@ -20,6 +20,15 @@
     <Filter Include="02. ImageManager">
       <UniqueIdentifier>{3245c10b-7507-42e6-85e4-951c8ed57c5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. Socket">
+      <UniqueIdentifier>{3f1b5633-077d-49f4-b436-ca3bae304f79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Socket\00. SocServer">
+      <UniqueIdentifier>{562a526f-207b-42c2-afad-f91179fcecb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. Socket\01. SocCom">
+      <UniqueIdentifier>{14bd762b-8d25-4bbd-8e62-3fd59bf89d0f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliServer.h">
@@ -46,6 +55,12 @@
     <ClInclude Include="ImageMgr.h">
       <Filter>02. ImageManager</Filter>
     </ClInclude>
+    <ClInclude Include="SocCom.h">
+      <Filter>03. Socket\01. SocCom</Filter>
+    </ClInclude>
+    <ClInclude Include="SocSvr.h">
+      <Filter>03. Socket\00. SocServer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliServer.cpp">
@@ -59,6 +74,12 @@
     </ClCompile>
     <ClCompile Include="ImageMgr.cpp">
       <Filter>02. ImageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SocCom.cpp">
+      <Filter>03. Socket\01. SocCom</Filter>
+    </ClCompile>
+    <ClCompile Include="SocSvr.cpp">
+      <Filter>03. Socket\00. SocServer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

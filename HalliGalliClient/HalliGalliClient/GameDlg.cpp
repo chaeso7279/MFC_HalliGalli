@@ -60,6 +60,17 @@ BOOL CGameDlg::DestroyWindow()
 	return CDialogEx::DestroyWindow();
 }
 
+void CGameDlg::InitSocket(CSocCom * pSocCom)
+{
+	if (pSocCom == nullptr)
+	{
+		AfxMessageBox("Socket이 NULL 입니다");
+		return;
+	}
+
+	m_pSocCom = pSocCom;
+}
+
 // CGameDlg 메시지 처리기입니다.
 void CGameDlg::OnStnClickedStaticGain()
 {

@@ -99,8 +99,12 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	
 	/* 이미지 관리 매니저 초기화 => Image폴더 내의 이미지 로드함 */
 	CImageMgr::GetInstance()->Initialize();
+
+	/* 소켓 초기화 */
+	InitSocket();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }

@@ -25,7 +25,15 @@ public:
 	virtual BOOL DestroyWindow(); 
 
 public:
+	/* 家南 包访 窃荐 */
+	void InitSocket(CSocCom* pSocCom);
+
+public:
 	afx_msg void OnStnClickedStaticGain();
+
+public:
+	/* 家南 包访 函荐 */
+	CSocCom* m_pSocCom = nullptr;
 
 public:
 	CListBox m_list;

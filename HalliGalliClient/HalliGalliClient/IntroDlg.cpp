@@ -6,6 +6,9 @@
 #include "IntroDlg.h"
 #include "afxdialogex.h"
 
+#include "ConnectDlg.h"
+#include "GameDlg.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -162,6 +165,12 @@ HCURSOR CIntroDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+BOOL CAboutDlg::DestroyWindow()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	return CDialogEx::DestroyWindow();
+}
+
 void CIntroDlg::OnBnClickedRadio2p()
 {
 	/* 2인용 체크 시 들어오는 함수 */
@@ -177,13 +186,35 @@ void CIntroDlg::OnBnClickedRadio4p()
 	m_Radio[RADIO_4P].SetCheck(FALSE);
 }
 
-BOOL CAboutDlg::DestroyWindow()
-{
-	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	return CDialogEx::DestroyWindow();
-}
-
 void CIntroDlg::OnBnClickedButtonConnect()
 {
-	/* 접속 버튼 클릭 */
+	/* 접속 버튼 클릭 시 들어오는 함수 */
+	CConnectDlg* pConnectDlg = new CConnectDlg;
+
+	if (pConnectDlg->DoModal() == IDOK)
+	{
+		//pConnectDlg->UpdateData(TRUE);
+
+		CSocCom* pSocCom = new CSocCom;
+		pSocCom->Create();
+
+		BOOL bResult = pSocCom->Connect(pConnectDlg->m_strIP, DEFAULT_PORT);
+		if (bResult)
+		{
+			/* 연결 성공시 GameDlg 로 전환 */
+			CGameDlg* pGameDlg = new CGameDlg;
+			pGameDlg->Create(IDD_GAME_DLG);
+
+			/* 소켓 포인터 전달 */
+			pGameDlg->InitSocket(pSocCom);
+
+			pGameDlg->ShowWindow(SW_SHOW);
+			ShowWindow(SW_HIDE);
+		}
+		else
+		{
+			/* 연결 실패 */
+			AfxMessageBox("접속 실패");
+		}
+	}
 }

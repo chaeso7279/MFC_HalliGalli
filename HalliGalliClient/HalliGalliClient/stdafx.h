@@ -51,17 +51,25 @@
 #endif
 #endif
 
+/* STL 관련 인클루드 */
 #include <vector>
 #include <list>
 #include <map>
 #include <algorithm>
-#include <fstream>
 
 using namespace std;
 
+/* 소켓 관련 인클루드 및 Define */
 #include <afxsock.h>
 
-#define UM_ACCEPT WM_USER+1
+#include "SocCom.h"
+
 #define UM_RECEIVE WM_USER+2
+
+/* 기타 */
+#include "Struct.h"
+#include "Macro.h"
+
+#include "ImageMgr.h" // 이미지 관리 클래스
 
 #pragma warning(disable : 4985)

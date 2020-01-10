@@ -55,7 +55,6 @@ using namespace std;
 #include <afxsock.h>
 
 #include "SocSvr.h"
-#include "SocCom.h"
 
 #define UM_ACCEPT WM_USER+1
 #define UM_RECEIVE WM_USER+2

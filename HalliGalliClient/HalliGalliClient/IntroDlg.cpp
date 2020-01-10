@@ -65,8 +65,6 @@ BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDCANCEL, &CIntroDlg::OnBnClickedCancel)
-	ON_BN_CLICKED(IDOK, &CIntroDlg::OnBnClickedOk)
 	ON_BN_CLICKED(IDC_RADIO_2P, &CIntroDlg::OnBnClickedRadio2p)
 	ON_BN_CLICKED(IDC_RADIO_4P, &CIntroDlg::OnBnClickedRadio4p)
 END_MESSAGE_MAP()
@@ -104,6 +102,8 @@ BOOL CIntroDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	/* 이미지 관리 매니저 초기화 => Image폴더 내의 이미지 로드함 */
+	CImageMgr::GetInstance()->Initialize();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -157,22 +157,10 @@ HCURSOR CIntroDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
-
-
-void CIntroDlg::OnBnClickedCancel()
-{
-}
-
-void CIntroDlg::OnBnClickedOk()
-{
-}
-
 void CIntroDlg::OnBnClickedRadio2p()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 }
-
 
 void CIntroDlg::OnBnClickedRadio4p()
 {

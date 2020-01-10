@@ -20,6 +20,12 @@
     <Filter Include="01. GameDlg">
       <UniqueIdentifier>{7dbd8ce1-d6c1-46cf-9266-b3b5d50caf1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. ImageManager">
+      <UniqueIdentifier>{41cdfc97-b81d-4c9a-a620-73504e578239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. Socket">
+      <UniqueIdentifier>{0a70096d-6f7a-4cfd-a8a1-eb95e6e85179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliClient.h">
@@ -40,6 +46,18 @@
     <ClInclude Include="GameDlg.h">
       <Filter>01. GameDlg</Filter>
     </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>98. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct.h">
+      <Filter>98. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageMgr.h">
+      <Filter>03. ImageManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SocCom.h">
+      <Filter>04. Socket</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliClient.cpp">
@@ -53,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="GameDlg.cpp">
       <Filter>01. GameDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageMgr.cpp">
+      <Filter>03. ImageManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SocCom.cpp">
+      <Filter>04. Socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

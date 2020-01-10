@@ -163,3 +163,29 @@ BOOL CHalliGalliServerDlg::DestroyWindow()
 
 	return CDialogEx::DestroyWindow();
 }
+
+LPARAM CHalliGalliServerDlg::OnAccept(UINT wParam, LPARAM lParam)
+{
+	AfxMessageBox("클라이언트 접속");
+	//m_strStatus = "접속 성공";
+
+	m_pSocCom = m_socServer.GetAcceptSocCom();
+	m_pSocCom->Init(this->m_hWnd);
+
+	//UpdateData(FALSE);
+	return TRUE;
+}
+
+LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+void CHalliGalliServerDlg::InitSocket()
+{
+	/* SocCom, SocServer 초기화 및 생성 함수 */
+	m_pSocCom = NULL;
+	m_socServer.Create(DEFAULT_PORT);
+	m_socServer.Listen();
+	m_socServer.Init(this->m_hWnd);
+}

@@ -56,8 +56,11 @@ using namespace std;
 
 #include "SocSvr.h"
 
-#define UM_ACCEPT WM_USER+1
-#define UM_RECEIVE WM_USER+2
+#define UM_ACCEPT	WM_USER+1
+#define UM_RECEIVE	WM_USER+2
+
+#define DEFAULT_PORT	5000
+#define DEFAULT_IP		"127.0.0.1"
 
 /* ±‚≈∏ */
 #include "Struct.h"

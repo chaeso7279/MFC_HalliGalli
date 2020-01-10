@@ -66,6 +66,9 @@ using namespace std;
 
 #define UM_RECEIVE WM_USER+2
 
+#define DEFAULT_PORT	5000
+#define DEFAULT_IP		"127.0.0.1"
+
 /* ±‚≈∏ */
 #include "Struct.h"
 #include "Macro.h"

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "SocSvr.h"
 
 // CHalliGalliServerDlg 대화 상자
 class CHalliGalliServerDlg : public CDialogEx
@@ -35,4 +36,14 @@ public:
 	virtual BOOL DestroyWindow();
 
 public:
+	/* 소켓 관련 함수 */
+	afx_msg LPARAM OnAccept(UINT wParam, LPARAM lParam);
+	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
+
+	void InitSocket();
+
+public:
+	/* 소켓 관련 변수 */
+	CSocSvr m_socServer;
+	CSocCom* m_pSocCom = nullptr;
 };

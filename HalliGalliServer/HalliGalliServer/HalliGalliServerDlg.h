@@ -34,7 +34,7 @@ protected:
 
 
 public:
-	HRESULT LoadImage();
+	HRESULT Load_Image();
 
 public:
 	list<CImage*> m_pImgLst[FRUIT_END]; // 이미지 저장 리스트

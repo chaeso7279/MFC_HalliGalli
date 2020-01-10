@@ -2,37 +2,34 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="00. MainApp">
-      <UniqueIdentifier>{a515432e-3638-42ad-8bfd-05d3ec3811dc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01. MainDlg">
-      <UniqueIdentifier>{23e698eb-eb85-4084-88f8-932a3dc866da}</UniqueIdentifier>
+      <UniqueIdentifier>{43a73769-94c0-427e-9bbc-4f633cfef463}</UniqueIdentifier>
     </Filter>
     <Filter Include="02. IntroDlg">
-      <UniqueIdentifier>{10d126ce-1e00-49ed-80a8-5f3921f2febb}</UniqueIdentifier>
+      <UniqueIdentifier>{63d9acb1-bea6-462d-ae94-13187f6c4989}</UniqueIdentifier>
     </Filter>
     <Filter Include="99. Default">
-      <UniqueIdentifier>{d81c7896-0872-44d7-bda3-d2623b615634}</UniqueIdentifier>
+      <UniqueIdentifier>{9cae72c7-0ef2-4170-83a1-4ea057d682a8}</UniqueIdentifier>
     </Filter>
     <Filter Include="98. Headers">
-      <UniqueIdentifier>{4f1f4f8b-4f07-4bee-a90e-afd2a11cf22e}</UniqueIdentifier>
+      <UniqueIdentifier>{bfb025f9-33c2-4633-b454-9f704248ae87}</UniqueIdentifier>
     </Filter>
     <Filter Include="99. Default\리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="01. GameDlg">
+      <UniqueIdentifier>{7dbd8ce1-d6c1-46cf-9266-b3b5d50caf1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>98. Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HalliGalliClient.h">
       <Filter>00. MainApp</Filter>
     </ClInclude>
-    <ClInclude Include="HalliGalliClientDlg.h">
-      <Filter>01. MainDlg</Filter>
-    </ClInclude>
     <ClInclude Include="IntroDlg.h">
       <Filter>02. IntroDlg</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>98. Headers</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>99. Default</Filter>
@@ -40,19 +37,22 @@
     <ClInclude Include="targetver.h">
       <Filter>99. Default</Filter>
     </ClInclude>
+    <ClInclude Include="GameDlg.h">
+      <Filter>01. GameDlg</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliClient.cpp">
       <Filter>00. MainApp</Filter>
-    </ClCompile>
-    <ClCompile Include="HalliGalliClientDlg.cpp">
-      <Filter>01. MainDlg</Filter>
     </ClCompile>
     <ClCompile Include="IntroDlg.cpp">
       <Filter>02. IntroDlg</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>99. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDlg.cpp">
+      <Filter>01. GameDlg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

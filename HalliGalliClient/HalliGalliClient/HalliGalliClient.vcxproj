@@ -21,22 +21,14 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D8B9B2F3-439C-4325-808D-1B93E2C23A6E}</ProjectGuid>
     <RootNamespace>HalliGalliClient</RootNamespace>
-<<<<<<< HEAD
-=======
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
->>>>>>> origin/donggg
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-  </PropertyGroup>
+ </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-<<<<<<< HEAD
     <PlatformToolset>v141</PlatformToolset>
-=======
-    <PlatformToolset>v142</PlatformToolset>
->>>>>>> origin/donggg
     <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>

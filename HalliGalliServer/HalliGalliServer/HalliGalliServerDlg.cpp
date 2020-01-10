@@ -153,3 +153,13 @@ HCURSOR CHalliGalliServerDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
+
+BOOL CHalliGalliServerDlg::DestroyWindow()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+
+	/* 이미지 매니저 삭제 */
+	CImageMgr::DestroyInstance();
+
+	return CDialogEx::DestroyWindow();
+}

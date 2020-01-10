@@ -29,6 +29,8 @@ public:
 // 구현입니다.
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL DestroyWindow();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -102,8 +104,6 @@ BOOL CIntroDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-	/* 이미지 관리 매니저 초기화 => Image폴더 내의 이미지 로드함 */
-	CImageMgr::GetInstance()->Initialize();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -165,4 +165,10 @@ void CIntroDlg::OnBnClickedRadio2p()
 void CIntroDlg::OnBnClickedRadio4p()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+}
+
+BOOL CAboutDlg::DestroyWindow()
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+	return CDialogEx::DestroyWindow();
 }

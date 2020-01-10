@@ -21,10 +21,18 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	virtual BOOL OnInitDialog();
+	virtual BOOL DestroyWindow(); 
+
+public:
 	afx_msg void OnStnClickedStaticGain();
+
+public:
+	CListBox m_list;
+
+public:
 	CString m_strCardCount;
 	CString m_strGain;
 	CStatic m_strMe;
-	CListBox m_list;
 	CString m_strSend;
 };

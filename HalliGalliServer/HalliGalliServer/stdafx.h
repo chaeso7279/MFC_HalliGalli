@@ -59,3 +59,6 @@ using namespace std;
 #pragma warning(disable : 4985)
 
 #include "Struct.h"
+#include "Macro.h"
+
+#include "ImageMgr.h" // 이미지 관리 클래스

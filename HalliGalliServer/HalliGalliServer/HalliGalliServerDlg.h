@@ -31,11 +31,4 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-
-	
-public:
-	HRESULT Load_CardImage(CString strPath = "../../Image/Card/");
-
-public:
-	vector<CImage*> m_vecCardImage[FRUIT_END]; // 카드 이미지 저장 벡터
 };

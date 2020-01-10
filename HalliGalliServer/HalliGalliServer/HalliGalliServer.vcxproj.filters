@@ -17,6 +17,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="02. ImageManager">
+      <UniqueIdentifier>{3245c10b-7507-42e6-85e4-951c8ed57c5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliServer.h">
@@ -37,6 +40,12 @@
     <ClInclude Include="Struct.h">
       <Filter>98. Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>98. Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageMgr.h">
+      <Filter>02. ImageManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliServer.cpp">
@@ -47,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>99. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageMgr.cpp">
+      <Filter>02. ImageManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

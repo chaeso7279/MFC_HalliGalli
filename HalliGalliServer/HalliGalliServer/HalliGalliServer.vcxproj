@@ -184,6 +184,8 @@
   <ItemGroup>
     <ClInclude Include="HalliGalliServer.h" />
     <ClInclude Include="HalliGalliServerDlg.h" />
+    <ClInclude Include="ImageMgr.h" />
+    <ClInclude Include="Macro.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
@@ -192,6 +194,7 @@
   <ItemGroup>
     <ClCompile Include="HalliGalliServer.cpp" />
     <ClCompile Include="HalliGalliServerDlg.cpp" />
+    <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

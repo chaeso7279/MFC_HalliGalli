@@ -152,3 +152,10 @@ HCURSOR CHalliGalliServerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+HRESULT CHalliGalliServerDlg::Load_Image()
+{
+	CFile File;
+
+
+	return E_NOTIMPL;
+}

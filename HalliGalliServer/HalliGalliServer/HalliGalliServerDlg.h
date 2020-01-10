@@ -31,4 +31,11 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+
+public:
+	HRESULT Load_Image();
+
+public:
+	list<CImage*> m_pImgLst[FRUIT_END]; // 이미지 저장 리스트
 };

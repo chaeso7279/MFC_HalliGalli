@@ -57,3 +57,5 @@ using namespace std;
 #define UM_RECEIVE WM_USER+2
 
 #pragma warning(disable : 4985)
+
+#include "Struct.h"

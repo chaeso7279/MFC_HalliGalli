@@ -34,8 +34,8 @@ res\HalliGalliClient.rc2
 
 응용 프로그램 마법사에서 대화 상자 클래스 하나를 만듭니다.
 
-HalliGalliClientDlg.h, HalliGalliClientDlg.cpp - 대화 상자
-    이 파일에는 CHalliGalliClientDlg 클래스가 포함됩니다. 이 클래스는 응용 프로그램의 주 대화 상자에 대한 동작을 정의합니다. 이 대화 상자 템플릿은 HalliGalliClient.rc에 있으며, Microsoft Visual C++에서 직접 편집할 수 있습니다.
+IntroDlg.h, IntroDlg.cpp - 대화 상자
+    이 파일에는 CIntro 클래스가 포함됩니다. 이 클래스는 응용 프로그램의 주 대화 상자에 대한 동작을 정의합니다. 이 대화 상자 템플릿은 HalliGalliClient.rc에 있으며, Microsoft Visual C++에서 직접 편집할 수 있습니다.
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -43,9 +43,6 @@ HalliGalliClientDlg.h, HalliGalliClientDlg.cpp - 대화 상자
 
 ActiveX 컨트롤
     응용 프로그램이 Active X 컨트롤을 지원합니다.
-
-인쇄 및 인쇄 미리 보기 지원
-    MFC 라이브러리의 CView 클래스에서 멤버 함수를 호출하여 응용 프로그램 마법사에서 인쇄, 인쇄 설정 및 인쇄 미리 보기 명령 코드를 생성할 수 있습니다.
 
 /////////////////////////////////////////////////////////////////////////////
 

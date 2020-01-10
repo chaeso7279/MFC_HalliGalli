@@ -32,7 +32,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
-
+	
 public:
 	HRESULT Load_CardImage(CString strPath = "../../Image/Card/");
 

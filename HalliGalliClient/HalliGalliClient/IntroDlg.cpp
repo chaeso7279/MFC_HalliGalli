@@ -64,6 +64,8 @@ BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDCANCEL, &CIntroDlg::OnBnClickedCancel)
+	ON_BN_CLICKED(IDOK, &CIntroDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -151,4 +153,5 @@ HCURSOR CIntroDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
+
 

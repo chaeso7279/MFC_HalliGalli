@@ -20,4 +20,11 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnStnClickedStaticGain();
+	CString m_strCardCount;
+	CString m_strGain;
+	CStatic m_strMe;
+	CListBox m_list;
+	CString m_strSend;
 };

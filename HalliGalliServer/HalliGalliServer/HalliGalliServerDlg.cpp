@@ -64,6 +64,8 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(UM_ACCEPT, OnAccept)
+	ON_MESSAGE(UM_RECEIVE, OnReceive)
 END_MESSAGE_MAP()
 
 
@@ -101,7 +103,8 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	
 	/* 이미지 관리 매니저 초기화 => Image폴더 내의 이미지 로드함 */
-	CImageMgr::GetInstance()->Initialize();
+	m_pImgMgr = CImageMgr::GetInstance();
+	m_pImgMgr->Initialize();
 
 	/* 소켓 초기화 */
 	InitSocket();
@@ -164,6 +167,7 @@ BOOL CHalliGalliServerDlg::DestroyWindow()
 
 	/* 이미지 매니저 삭제 */
 	CImageMgr::DestroyInstance();
+	m_pImgMgr = nullptr;
 
 	return CDialogEx::DestroyWindow();
 }

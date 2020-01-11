@@ -9,6 +9,10 @@
 // CHalliGalliServerDlg 대화 상자
 class CHalliGalliServerDlg : public CDialogEx
 {
+	/* Picture Ctrl 용 상수값 */
+	enum USER_ID { USER_PLAYER, USER_OTHER, USER_END };
+	enum CARD_STATUS { OWN, THROWN, CARD_END };
+
 // 생성입니다.
 public:
 	CHalliGalliServerDlg(CWnd* pParent = NULL);	// 표준 생성자입니다.
@@ -43,7 +47,17 @@ public:
 	void InitSocket();
 
 public:
+	/* 이미지 관련 함수 */
+
+public:
 	/* 소켓 관련 변수 */
 	CSocSvr m_socServer;
 	CSocCom* m_pSocCom = nullptr;
+
+public:
+	/* 이미지 관련 변수 */
+	CStatic m_BellPicCtrl; // 종 이미지 컨트롤
+	CStatic m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
+
+	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 };

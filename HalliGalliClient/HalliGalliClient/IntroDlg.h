@@ -39,5 +39,8 @@ public:
 	afx_msg void OnBnClickedButtonConnect(); 
 
 public:
+	void GameDlgEnd();
+
+public:
 	CButton m_Radio[RADIO_END];
 };

@@ -218,3 +218,8 @@ void CIntroDlg::OnBnClickedButtonConnect()
 		}
 	}
 }
+
+void CIntroDlg::GameDlgEnd()
+{
+	SendMessage(WM_CLOSE);
+}

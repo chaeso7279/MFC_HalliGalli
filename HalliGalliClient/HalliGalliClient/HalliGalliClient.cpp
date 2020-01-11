@@ -10,7 +10,7 @@
 #define new DEBUG_NEW
 #endif
 
-
+CIntroDlg* g_pIntroDlg = nullptr;
 // CHalliGalliClientApp
 
 BEGIN_MESSAGE_MAP(CHalliGalliClientApp, CWinApp)
@@ -77,6 +77,8 @@ BOOL CHalliGalliClientApp::InitInstance()
 
 	CIntroDlg dlg;
 	m_pMainWnd = &dlg;
+	g_pIntroDlg = &dlg;
+
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
@@ -108,4 +110,3 @@ BOOL CHalliGalliClientApp::InitInstance()
 	// 반환합니다.
 	return FALSE;
 }
-

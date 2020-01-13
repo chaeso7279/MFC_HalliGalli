@@ -53,11 +53,10 @@ void CGameDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CGameDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CGameDlg::OnClickedImgPlayerOwn)
-	ON_STN_CLICKED(IDC_IMG_OTHER_OWN, &CGameDlg::OnClickedImgOhterOwn)
 	ON_BN_CLICKED(IDC_BUTTON_SEND, &CGameDlg::OnBnClickedButtonSend)	
 	ON_BN_CLICKED(IDC_BUTTON_SUB, &CGameDlg::OnBnClickedButtonSub)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
-	ON_STN_CLICKED(IDC_IMG_BELL, &CGameDlg::OnStnClickedImgBell)
+	ON_STN_CLICKED(IDC_IMG_BELL, &CGameDlg::OnClickedImgBell)
 END_MESSAGE_MAP()
 
 BOOL CGameDlg::OnInitDialog()
@@ -77,13 +76,20 @@ BOOL CGameDlg::OnInitDialog()
 }
 BOOL CGameDlg::DestroyWindow()
 {
-	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-
 	/* 이미지 매니저 삭제 */
 	CImageMgr::DestroyInstance();
 	m_pImgMgr = nullptr;
 
 	return CDialogEx::DestroyWindow();
+}
+
+void CGameDlg::OnCancel()
+{
+	CDialogEx::OnCancel();
+	DestroyWindow();
+
+	/* 인트로 다이얼로그 삭제 */
+	g_pIntroDlg->DestroyWindow();
 }
 
 LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
@@ -96,8 +102,11 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 	strTemp.Format("%c", pTemp[0]);
 	int iType = atoi(strTemp.GetString());
+	
 	CString strFruitID;
 	CString	strFruitCnt;
+	CARD tCard;
+
 	switch (iType)
 	{
 	case SOC_INITGAME:
@@ -107,19 +116,17 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		break;
 	case SOC_GAMESTART:
 		m_bStartSvr = TRUE;
-		//cout << "게임 준비 완료" << endl;
 		break;
 	case SOC_THROWNCARD:	
-		CARD tCard;
-	
 		strFruitID.Format("%c", (pTemp+1)[0]);
 		strFruitCnt.Format("%c", (pTemp + 1)[1]);
 
 		tCard.iFruitID = atoi(strFruitID.GetString());
 		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
 
-		addOtherThrownCard(tCard);
+		AddOtherThrownCard(tCard);
 		ChangeCardImage(USER_OTHER, THROWN, tCard);
+		
 		GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(TRUE);
 		break;
 	case SOC_BELL:
@@ -177,7 +184,7 @@ void CGameDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus,
 
 void CGameDlg::OnClickedImgPlayerOwn()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	/* 카드 내기 */
 	SetDlgItemInt(IDC_EDIT_WHOLECOUNTNUM, wcnt);
 	SetDlgItemInt(IDC_EDIT_CARDCOUNTNUM, ccnt);
 
@@ -185,10 +192,13 @@ void CGameDlg::OnClickedImgPlayerOwn()
 
 	tCard.iFruitID = m_lstMyCard.back().iFruitID;
 	tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
-	addMyThrownCard(tCard);
+	
+	AddMyThrownCard(tCard);
+	ChangeCardImage(USER_PLAYER, THROWN, tCard); 
+	
 	m_lstMyCard.pop_back();
-	ChangeCardImage(USER_PLAYER, THROWN, tCard);
 
+	/* 서버에 낸 카드 전달 */
 	char pCardInfo[MID_STR] = "";
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
@@ -196,29 +206,6 @@ void CGameDlg::OnClickedImgPlayerOwn()
 
 	wcnt--;
 	ccnt--;
-}
-
-void CGameDlg::OnClickedImgOhterOwn()
-{
-	// 자신이 낸 카드 이미지 처리
-	CARD tCard;
-
-	tCard.iFruitID = m_lstMyCard.back().iFruitID;
-	tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
-	addMyThrownCard(tCard);
-	m_lstMyCard.pop_back();
-	ChangeCardImage(USER_PLAYER, THROWN, tCard);
-	//SendGame(SOC_THROWNCARD);
-}
-
-void CGameDlg::OnCancel()
-{
-	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
-	CDialogEx::OnCancel();
-	DestroyWindow();
-
-	/* 인트로 다이얼로그 삭제 */
-	g_pIntroDlg->DestroyWindow();
 }
 
 void CGameDlg::OnBnClickedButtonSend()
@@ -230,15 +217,6 @@ void CGameDlg::OnBnClickedButtonSend()
 	m_list.AddString(">>" + m_strSend);
 	m_strSend = (_T(""));
 	UpdateData(FALSE);
-}
-
-void CGameDlg::OnBnClickedButtonSub()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	deleteAllMyThrownCard();
-
-
-	ChangeCardImage(USER_OTHER, THROWN, m_lstMyThrownCard.front());
 }
 
 void CGameDlg::InitGame()
@@ -266,12 +244,12 @@ BOOL CGameDlg::ReceiveCard(const char* pCardInfo)
 		return FALSE;
 }
 
-void CGameDlg::addMyThrownCard(const CARD sCard)
+void CGameDlg::AddMyThrownCard(const CARD sCard)
 {
 	m_lstMyThrownCard.push_back(sCard);	
 }
 
-void CGameDlg::deleteAllMyThrownCard()
+void CGameDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을 때
@@ -293,12 +271,12 @@ void CGameDlg::deleteAllMyThrownCard()
 	
 }
 
-void CGameDlg::addOtherThrownCard(const CARD sCard)
+void CGameDlg::AddOtherThrownCard(const CARD sCard)
 {
 	m_lstOtherThrownCard.push_back(sCard);
 }
 
-void CGameDlg::deleteAllOtherThrownCard()
+void CGameDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을때
@@ -320,7 +298,7 @@ void CGameDlg::deleteAllOtherThrownCard()
 }
 
 
-void CGameDlg::OnStnClickedImgBell()
+void CGameDlg::OnClickedImgBell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	SendGame(SOC_BELL);
@@ -342,7 +320,7 @@ void CGameDlg::CheckFive()
 
 void CGameDlg::Win()
 {
-	deleteAllMyThrownCard();
-	deleteAllOtherThrownCard();
+	DeleteAllMyThrownCard();
+	DeleteAllOtherThrownCard();
 	m_bWin = FALSE;
 }

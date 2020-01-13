@@ -27,6 +27,7 @@ protected:
 public:
 	virtual BOOL OnInitDialog();
 	virtual BOOL DestroyWindow(); 
+	virtual void OnCancel();
 
 public:
 	/* 소켓 관련 함수 */
@@ -39,27 +40,25 @@ public:
 
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = {FRUIT_BACK, 1});
 	
-	afx_msg void OnClickedImgPlayerOwn(); // 카드 이미지 교체 테스트
-	afx_msg void OnClickedImgOhterOwn();
-
-	afx_msg void OnStnClickedImgBell();
-	afx_msg void OnBnClickedButtonSub();
+	afx_msg void OnClickedImgPlayerOwn();
+	afx_msg void OnClickedImgBell();
 
 public:
 	/* 게임 진행 관련 함수 */
 	void InitGame();
 	BOOL ReceiveCard(const char* pCardInfo);
 
-	void addMyThrownCard(const CARD sCard);
-	void deleteAllMyThrownCard();
-	void addOtherThrownCard(const CARD sCard);
-	void deleteAllOtherThrownCard();
 	void CheckFive();
 	void Win();
 
+	void AddMyThrownCard(const CARD sCard);
+	void AddOtherThrownCard(const CARD sCard);
+	void DeleteAllMyThrownCard();
+	void DeleteAllOtherThrownCard();
 
 public:
-	virtual void OnCancel();
+	/* 채팅 관련 함수 */
+	afx_msg void OnBnClickedButtonSend();
 
 public:
 	/* 소켓 관련 변수 */
@@ -78,14 +77,10 @@ public:
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 
 public:
-	/* 채팅 관련 함수 */
-	afx_msg void OnBnClickedButtonSend();
-
-public:
 	CString m_strGain;
-	CString m_strSend;
-
+	
 public:
+	/* 카드 관련 자료구조 */
 	list<CARD> m_lstMyCard;
 	list<CARD> m_lstMyThrownCard;
 	list<CARD> m_lstOtherThrownCard;
@@ -93,11 +88,15 @@ public:
 public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartSvr = FALSE;
-	BOOL m_bWin;
+	BOOL m_bWin = FALSE;
 
 	CEdit m_strWholeCountNum;
 	CEdit m_strCardCountNum;
 	CStatic m_strCardCount;
 	CStatic m_strWholeCount;
 	CString m_strMe;
+
+public:
+	/* 채팅 관련 변수 */
+	CString m_strSend;
 };

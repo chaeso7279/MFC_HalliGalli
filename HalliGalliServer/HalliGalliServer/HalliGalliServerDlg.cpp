@@ -73,7 +73,7 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(UM_ACCEPT, OnAccept)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
-	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnStnClickedImgPlayerOwn)
+	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnClickedImgPlayerOwn)
 END_MESSAGE_MAP()
 
 
@@ -210,23 +210,25 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 	strTemp.Format("%c", pTemp[0]);
 	int iType = atoi(strTemp.GetString());
+	
 	CString strFruitID;
 	CString	strFruitCnt;
+	
+	CARD tCard;
+
 	switch (iType)
 	{
 	case SOC_GAMESTART:
 		m_bStartCnt = TRUE;
 		break;
 	case SOC_THROWNCARD:
-		CARD tCard;
-
 		strFruitID.Format("%c", (pTemp + 1)[0]);
 		strFruitCnt.Format("%c", (pTemp + 1)[1]);
 
 		tCard.iFruitID = atoi(strFruitID.GetString());
 		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
 
-		addOtherThrownCard(tCard);
+		AddOtherThrownCard(tCard);
 		ChangeCardImage(USER_OTHER, THROWN, tCard);
 		GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(TRUE);
 		break;
@@ -359,10 +361,6 @@ void CHalliGalliServerDlg::SendCardToClient()
 
 		sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 
-#ifdef _CONSOLE
-		cout << pCardInfo << endl;
-#endif
-
 		SendGame(SOC_INITGAME, pCardInfo);
 	}
 
@@ -394,23 +392,26 @@ void CHalliGalliServerDlg::CheckFive()
 {
 	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
 		m_bWin = TRUE;
-
 }
 
 void CHalliGalliServerDlg::Win()
 {
-	deleteAllMyThrownCard();
-	deleteAllOtherThrownCard();
+	DeleteAllMyThrownCard();
+	DeleteAllOtherThrownCard();
 	m_bWin = FALSE;
 }
 
-void CHalliGalliServerDlg::addMyThrownCard(const CARD sCard)
+void CHalliGalliServerDlg::AddMyThrownCard(const CARD sCard)
 {
 	m_lstMyThrownCard.push_back(sCard);
-
 }
 
-void CHalliGalliServerDlg::deleteAllMyThrownCard()
+void CHalliGalliServerDlg::AddOtherThrownCard(const CARD sCard)
+{
+	m_lstOtherThrownCard.push_back(sCard);
+}
+
+void CHalliGalliServerDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을 때
@@ -432,12 +433,7 @@ void CHalliGalliServerDlg::deleteAllMyThrownCard()
 
 }
 
-void CHalliGalliServerDlg::addOtherThrownCard(const CARD sCard)
-{
-	m_lstOtherThrownCard.push_back(sCard);
-}
-
-void CHalliGalliServerDlg::deleteAllOtherThrownCard()
+void CHalliGalliServerDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을때
@@ -458,21 +454,23 @@ void CHalliGalliServerDlg::deleteAllOtherThrownCard()
 	}
 }
 
-void CHalliGalliServerDlg::OnStnClickedImgPlayerOwn()
+void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	
+	/* 카드 내기 */
 	CARD tCard;
 
 	tCard.iFruitID = m_lstMyCard.back().iFruitID;
 	tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
-	addMyThrownCard(tCard);
-	m_lstMyCard.pop_back();
+	
+	AddMyThrownCard(tCard);
 	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+	
+	m_lstMyCard.pop_back();
 
+	/* 클라에 낸 카드 전달 */
 	char pCardInfo[MID_STR] = "";
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
-	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
 	SendGame(SOC_THROWNCARD, pCardInfo);
-	
+
+	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
 }

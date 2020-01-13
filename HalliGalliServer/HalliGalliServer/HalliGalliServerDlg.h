@@ -68,6 +68,10 @@ public:
 	void DeleteAllOtherThrownCard();
 
 public:
+	/* 채팅 관련 함수 */
+	afx_msg void OnClickedButtonSend();
+
+public:
 	/* 소켓 관련 변수 */
 	CSocSvr m_socServer;
 	CSocCom* m_pSocCom = nullptr;
@@ -95,4 +99,17 @@ public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartCnt = FALSE;
 	BOOL m_bWin = FALSE;
+
+	CEdit m_strCardCountNum;
+	CEdit m_strWholeCountNum;
+	
+	CStatic m_strWholeCount;
+	CStatic m_strCardCount;
+	CString m_strMe;
+	CString m_strGain;
+
+public:
+	/* 채팅 관련 변수 */
+	CListBox m_list;
+	CString m_strSend;
 };

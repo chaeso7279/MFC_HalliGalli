@@ -56,6 +56,8 @@ public:
 	void DeleteAllMyThrownCard();
 	void DeleteAllOtherThrownCard();
 
+	void ChangeMyTurn(BOOL bMyTurn);
+
 public:
 	/* 채팅 관련 함수 */
 	afx_msg void OnBnClickedButtonSend();
@@ -83,6 +85,8 @@ public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartSvr = FALSE;
 	BOOL m_bTakeCard = FALSE;
+	BOOL m_bMyTurn = FALSE;
+	BOOL m_bOtherBell = FALSE;
 
 	CEdit m_strWholeCountNum;
 	CEdit m_strCardCountNum;

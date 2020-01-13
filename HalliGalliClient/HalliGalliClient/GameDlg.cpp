@@ -24,7 +24,7 @@ CGameDlg::CGameDlg(CWnd* pParent /*=NULL*/)
 	, m_strGain(_T(""))
 	, m_strSend(_T(""))
 	, m_bTakeCard{}
-	, m_strMe(_T(""))
+	, m_strMe(_T("상대방의 차례입니다"))
 {
 }
 
@@ -111,7 +111,10 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 	case SOC_INITGAME:
 		/* 서버로부터 카드 받기 */
 		if (ReceiveCard(pTemp + 1) == TRUE)
+		{
 			SendGame(SOC_GAMESTART);
+			ChangeMyTurn(FALSE);
+		}	
 		break;
 	case SOC_GAMESTART:
 		m_bStartSvr = TRUE;
@@ -125,8 +128,7 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 		AddOtherThrownCard(tCard);
 		ChangeCardImage(USER_OTHER, THROWN, tCard);
-		
-		GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(TRUE);
+		ChangeMyTurn(TRUE);
 		break;
 	case SOC_BELL:
 		break;
@@ -174,10 +176,8 @@ void CGameDlg::InitPicCtrl()
 	ChangeCardImage(USER_PLAYER, OWN);
 	ChangeCardImage(USER_OTHER, OWN);
 
-	CARD tCard = { FRUIT_BACK, 2 };
-
-	ChangeCardImage(USER_PLAYER, THROWN, tCard);
-	ChangeCardImage(USER_OTHER, THROWN, tCard);
+	ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
+	ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 
 	CImage* pImage = nullptr;
 
@@ -214,8 +214,10 @@ void CGameDlg::OnClickedImgPlayerOwn()
 	/* 서버에 낸 카드 전달 */
 	char pCardInfo[MID_STR] = "";
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
-	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
 	SendGame(SOC_THROWNCARD, pCardInfo);
+	
+	/* 턴 변경 */
+	ChangeMyTurn(FALSE);
 
 	wcnt--;
 	ccnt--;
@@ -265,7 +267,7 @@ void CGameDlg::AddMyThrownCard(const CARD sCard)
 void CGameDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
-	//내가 이겼을 때
+	/* 벨을 제대로 때렸을 때 */
 	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstMyThrownCard.size();
@@ -275,13 +277,14 @@ void CGameDlg::DeleteAllMyThrownCard()
 			m_lstMyCard.push_back(m_lstMyThrownCard.back());
 			m_lstMyThrownCard.pop_back();
 		}
+
+		ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 	}
-	//졌을 때
-	else
-	{
-		m_lstMyThrownCard.clear();
-	}
-	
+	////졌을 때
+	//else
+	//{
+	//	m_lstMyThrownCard.clear();
+	//}
 }
 
 void CGameDlg::AddOtherThrownCard(const CARD sCard)
@@ -292,7 +295,7 @@ void CGameDlg::AddOtherThrownCard(const CARD sCard)
 void CGameDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
-	//내가 이겼을때
+	/* 벨을 제대로 때렸을 때 */
 	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstOtherThrownCard.size();
@@ -302,25 +305,51 @@ void CGameDlg::DeleteAllOtherThrownCard()
 			m_lstMyCard.push_back(m_lstOtherThrownCard.back());
 			m_lstOtherThrownCard.pop_back();
 		}
+
+		ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 	}
-	//내가 졌을때
+	////내가 졌을때
+	//else
+	//{
+	//	m_lstOtherThrownCard.clear();
+	//}
+}
+
+void CGameDlg::ChangeMyTurn(BOOL bMyTurn)
+{
+	m_bMyTurn = bMyTurn;
+	if (m_bMyTurn)
+		m_strMe = "당신의 차례입니다";
 	else
-	{
-		m_lstOtherThrownCard.clear();
-	}
+		m_strMe = "상대방의 차례입니다";
+
+	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(m_bMyTurn);
+
+	UpdateData(FALSE);
 }
 
 
 void CGameDlg::OnClickedImgBell()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	/* 벨을 클릭 했을 경우 */
+	if (m_bOtherBell) // 이미 상대방이 벨을 먼저 눌렀으면 return
+		return;
+
 	SendGame(SOC_BELL);
-	CheckThrownCard();
+	CheckThrownCard(); // 카드 검사
+
 	if (m_bTakeCard)
 	{
+		// 벨을 잘 때렸을 경우
 		TakeThrownCard();
-		SendGame(SOC_BELL);
-		//SOC_TAKECARD
+		SendGame(SOC_TAKECARD); // 카드를 가져갔음을 상대에게 알림
+
+		m_bTakeCard = FALSE;
+	}
+	else
+	{
+		// 벨을 잘못 때렸을 경우
+		SendGame(SOC_NOTAKECARD); // 상대에게 벨을 잘못 때렸음을 알림
 	}
 }
 
@@ -328,12 +357,12 @@ void CGameDlg::CheckThrownCard()
 {
 	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
 		m_bTakeCard = TRUE;
-
+	else
+		m_bTakeCard = FALSE;
 }
 
 void CGameDlg::TakeThrownCard()
 {
 	DeleteAllMyThrownCard();
 	DeleteAllOtherThrownCard();
-	m_bTakeCard = FALSE;
 }

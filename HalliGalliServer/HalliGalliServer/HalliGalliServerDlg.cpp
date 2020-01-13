@@ -56,7 +56,7 @@ CHalliGalliServerDlg::CHalliGalliServerDlg(CWnd* pParent /*=NULL*/)
 	, m_strGain(_T(""))
 	, m_strSend(_T(""))
 	, m_bTakeCard{}
-	, m_strMe(_T(""))
+	, m_strMe(_T("클라이언트 접속 대기중"))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -89,6 +89,7 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnClickedImgPlayerOwn)
 	ON_BN_CLICKED(IDC_BUTTON_SEND, &CHalliGalliServerDlg::OnClickedButtonSend)
+	ON_STN_CLICKED(IDC_IMG_BELL, &CHalliGalliServerDlg::OnClickedImgBell)
 END_MESSAGE_MAP()
 
 
@@ -244,11 +245,20 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 		AddOtherThrownCard(tCard);
 		ChangeCardImage(USER_OTHER, THROWN, tCard);
-		GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(TRUE);
+		
+		ChangeMyTurn(TRUE);
 		break;
 	case SOC_BELL:
+		/* 상대가 벨을 눌렀을 경우 */
+		m_bOtherBell = TRUE;
 		break;
 	case SOC_TAKECARD:
+		/* 상대가 카드를 가져갔을 경우 */
+		m_bOtherBell = FALSE;
+		break;
+	case SOC_NOTAKECARD:
+		/* 상대가 벨을 잘못친 경우 */
+		m_bOtherBell = FALSE;
 		break;
 	case SOC_TEXT:
 		str.Format("%s", pTemp + 1);
@@ -296,10 +306,8 @@ void CHalliGalliServerDlg::InitPicCtrl()
 	ChangeCardImage(USER_PLAYER, OWN);
 	ChangeCardImage(USER_OTHER, OWN);
 
-	CARD tCard = { FRUIT_BACK, 2 };
-
-	ChangeCardImage(USER_PLAYER, THROWN, tCard);
-	ChangeCardImage(USER_OTHER, THROWN, tCard);
+	ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
+	ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 
 	CImage* pImage = nullptr;
 
@@ -391,6 +399,9 @@ void CHalliGalliServerDlg::InitGame()
 	InitCardDeck();
 	/* 클라이언트에 카드 보냄 */
 	SendCardToClient();
+
+	/* 서버 먼저 턴 */
+	ChangeMyTurn(TRUE);
 }
 
 void CHalliGalliServerDlg::SendCardToClient()
@@ -424,13 +435,14 @@ void CHalliGalliServerDlg::CheckThrownCard()
 {
 	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
 		m_bTakeCard = TRUE;
+	else
+		m_bTakeCard = FALSE;
 }
 
 void CHalliGalliServerDlg::TakeThrownCard()
 {
 	DeleteAllMyThrownCard();
 	DeleteAllOtherThrownCard();
-	m_bTakeCard = FALSE;
 }
 
 void CHalliGalliServerDlg::AddMyThrownCard(const CARD sCard)
@@ -446,7 +458,7 @@ void CHalliGalliServerDlg::AddOtherThrownCard(const CARD sCard)
 void CHalliGalliServerDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
-	//내가 이겼을 때
+	/* 벨을 제대로 때렸을 때 */
 	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstMyThrownCard.size();
@@ -456,19 +468,21 @@ void CHalliGalliServerDlg::DeleteAllMyThrownCard()
 			m_lstMyCard.push_back(m_lstMyThrownCard.back());
 			m_lstMyThrownCard.pop_back();
 		}
+
+		ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 	}
-	//졌을 때
-	else
-	{
-		m_lstMyThrownCard.clear();
-	}
+	////졌을 때
+	//else
+	//{
+	//	m_lstMyThrownCard.clear();
+	//}
 
 }
 
 void CHalliGalliServerDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
-	//내가 이겼을때
+	/* 벨을 제대로 때렸을 때 */
 	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstOtherThrownCard.size();
@@ -478,12 +492,27 @@ void CHalliGalliServerDlg::DeleteAllOtherThrownCard()
 			m_lstMyCard.push_back(m_lstOtherThrownCard.back());
 			m_lstOtherThrownCard.pop_back();
 		}
+
+		ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 	}
-	//내가 졌을때
+	////내가 졌을때
+	//else
+	//{
+	//	m_lstOtherThrownCard.clear();
+	//}
+}
+
+void CHalliGalliServerDlg::ChangeMyTurn(BOOL bMyTurn)
+{
+	m_bMyTurn = bMyTurn;
+	if (m_bMyTurn)
+		m_strMe = "당신의 차례입니다";
 	else
-	{
-		m_lstOtherThrownCard.clear();
-	}
+		m_strMe = "상대방의 차례입니다";
+
+	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(m_bMyTurn);
+
+	UpdateData(FALSE);
 }
 
 void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
@@ -508,8 +537,28 @@ void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 	SendGame(SOC_THROWNCARD, pCardInfo);
 
-	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
+	/* 턴 변경 */
+	ChangeMyTurn(FALSE);
 
 	wcnt--;
 	ccnt--;
+}
+
+void CHalliGalliServerDlg::OnClickedImgBell()
+{
+	/* 벨을 클릭 했을 경우 */
+
+	if (m_bOtherBell) // 이미 상대방이 벨을 먼저 눌렀으면 return
+		return;
+	
+	SendGame(SOC_BELL);
+	CheckThrownCard(); // 카드 검사
+
+	if (m_bTakeCard)
+	{
+		TakeThrownCard();
+		SendGame(SOC_TAKECARD); // 카드를 가져갔음을 상대에게 알림
+
+		m_bTakeCard = FALSE;
+	}
 }

@@ -66,7 +66,8 @@ using namespace std;
 #define SOC_TEXT			3	// 전송 데이터: 보내는 문자열(m_strSend)
 #define SOC_THROWNCARD		4	// 전송 데이터: 내는 카드
 #define SOC_BELL			5	// 전송 데이터: X
-#define SOC_TAKECARD		6	// 전송 데이터: 가지게 되는 카드 개수?
+#define SOC_TAKECARD		6	// 전송 데이터: X
+#define SOC_NOTAKECARD		7	// 전송 데이터: 패널티 카드 한장 전송
 
 #define DEFAULT_PORT	5000
 #define DEFAULT_IP		"127.0.0.1"

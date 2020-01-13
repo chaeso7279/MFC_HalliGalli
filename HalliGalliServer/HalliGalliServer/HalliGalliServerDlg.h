@@ -53,6 +53,7 @@ public:
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = { FRUIT_BACK, 1 });
 	
 	afx_msg void OnClickedImgPlayerOwn();
+	afx_msg void OnClickedImgBell();
 
 public:
 	/* 게임 진행 관련 함수 */
@@ -67,6 +68,8 @@ public:
 	void AddOtherThrownCard(const CARD sCard);
 	void DeleteAllMyThrownCard();
 	void DeleteAllOtherThrownCard();
+
+	void ChangeMyTurn(BOOL bMyTurn);
 
 public:
 	/* 채팅 관련 함수 */
@@ -100,6 +103,8 @@ public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartCnt = FALSE;
 	BOOL m_bTakeCard = FALSE;
+	BOOL m_bMyTurn = FALSE;
+	BOOL m_bOtherBell = FALSE;
 
 	CEdit m_strCardCountNum;
 	CEdit m_strWholeCountNum;

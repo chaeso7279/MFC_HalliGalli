@@ -131,8 +131,19 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		ChangeMyTurn(TRUE);
 		break;
 	case SOC_BELL:
+		/* 상대가 벨을 눌렀을 경우 */
+		m_bOtherBell = TRUE;
 		break;
 	case SOC_TAKECARD:
+		/* 상대가 카드를 가져갔을 경우 */
+		m_bOtherBell = FALSE;
+		DeleteAllMyThrownCard();
+		DeleteAllOtherThrownCard();
+		AfxMessageBox("상대가 카드를 획득했습니다!");
+		break;
+	case SOC_NOTAKECARD:
+		/* 상대가 벨을 잘못친 경우 */
+		m_bOtherBell = FALSE;
 		break;
 	case SOC_TEXT:
 		str.Format("%s", pTemp + 1);
@@ -190,13 +201,19 @@ void CGameDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus,
 {
 	CImage* pImage = m_pImgMgr->GetCardImage(tCard.iFruitID, tCard.iFruitCnt);
 
-	if(pImage != nullptr)
+	if (pImage != nullptr)
+	{
 		m_CardPicCtrl[eID][eStatus].SetBitmap(*pImage);
+		Invalidate(TRUE);
+	}
 }
 
 
 void CGameDlg::OnClickedImgPlayerOwn()
 {
+	if (!m_bConnect || !m_bStartSvr || !m_bMyTurn)
+		return;
+
 	/* 카드 내기 */
 	SetDlgItemInt(IDC_EDIT_WHOLECOUNTNUM, wcnt);
 	SetDlgItemInt(IDC_EDIT_CARDCOUNTNUM, ccnt);
@@ -267,24 +284,24 @@ void CGameDlg::AddMyThrownCard(const CARD sCard)
 void CGameDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
-	/* 벨을 제대로 때렸을 때 */
+	/* 내가 카드를 가져갈 경우 */
 	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstMyThrownCard.size();
 
 		for (int i = 0; i < nThrowCardCount; i++)
 		{
-			m_lstMyCard.push_back(m_lstMyThrownCard.back());
+			m_lstMyCard.push_front(m_lstMyThrownCard.back());
 			m_lstMyThrownCard.pop_back();
 		}
-
-		ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 	}
-	////졌을 때
-	//else
-	//{
-	//	m_lstMyThrownCard.clear();
-	//}
+	/* 상대가 카드를 가져갈 경우 */
+	else
+	{
+		m_lstMyThrownCard.clear();
+	}
+
+	ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 }
 
 void CGameDlg::AddOtherThrownCard(const CARD sCard)
@@ -295,24 +312,24 @@ void CGameDlg::AddOtherThrownCard(const CARD sCard)
 void CGameDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
-	/* 벨을 제대로 때렸을 때 */
+	/* 내가 카드를 가져갈 경우 */
 	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstOtherThrownCard.size();
 
 		for (int i = 0; i < nThrowCardCount; i++)
 		{
-			m_lstMyCard.push_back(m_lstOtherThrownCard.back());
+			m_lstMyCard.push_front(m_lstOtherThrownCard.back());
 			m_lstOtherThrownCard.pop_back();
 		}
-
-		ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 	}
-	////내가 졌을때
-	//else
-	//{
-	//	m_lstOtherThrownCard.clear();
-	//}
+	/* 상대가 카드를 가져갈 경우 */
+	else
+	{
+		m_lstOtherThrownCard.clear();
+	}
+
+	ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 }
 
 void CGameDlg::ChangeMyTurn(BOOL bMyTurn)
@@ -327,7 +344,6 @@ void CGameDlg::ChangeMyTurn(BOOL bMyTurn)
 
 	UpdateData(FALSE);
 }
-
 
 void CGameDlg::OnClickedImgBell()
 {
@@ -344,6 +360,8 @@ void CGameDlg::OnClickedImgBell()
 		TakeThrownCard();
 		SendGame(SOC_TAKECARD); // 카드를 가져갔음을 상대에게 알림
 
+		AfxMessageBox("카드 획득!");
+
 		m_bTakeCard = FALSE;
 	}
 	else
@@ -355,7 +373,15 @@ void CGameDlg::OnClickedImgBell()
 
 void CGameDlg::CheckThrownCard()
 {
-	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
+	int iMyFruitCnt = 0;
+	int iOtherFruitCnt = 0;
+
+	if (!m_lstMyThrownCard.empty())
+		iMyFruitCnt = m_lstMyThrownCard.back().iFruitCnt;
+	if (!m_lstOtherThrownCard.empty())
+		iOtherFruitCnt = m_lstOtherThrownCard.back().iFruitCnt;
+
+	if (iMyFruitCnt + iOtherFruitCnt == 5)
 		m_bTakeCard = TRUE;
 	else
 		m_bTakeCard = FALSE;

@@ -45,14 +45,26 @@ public:
 	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
 
 	void InitSocket();
+	void SendGame(int iType, CString strTemp = "");
 
 public:
 	/* 이미지 관련 함수 */
+	void InitPicCtrl();
+	
+	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = { FRUIT_BACK, 1 });
+
+public:
+	/* 게임 진행 관련 함수 */
+	void InitGame(); // 게임 초기화 함수 (변수 등 초기화)
+	void InitCardDeck(); // 카드 초기화 및 셔플 함수
+	void SendCardToClient(); // 섞은 카드 클라에 보내는 함수
 
 public:
 	/* 소켓 관련 변수 */
 	CSocSvr m_socServer;
 	CSocCom* m_pSocCom = nullptr;
+
+	BOOL m_bConnect = FALSE;
 
 public:
 	/* 이미지 관련 변수 */
@@ -60,4 +72,17 @@ public:
 	CStatic m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
 
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
+	
+public:
+	/* 카드 초기 셔플 */
+	CARD m_cardDec[28];
+	int  m_shuffleCardIndex[28];
+
+	list<CARD> m_lstMyCard;
+	list<CARD> m_lstMyThrownCard;
+	list<CARD> m_lstOtherThorwnCard;
+
+public:
+	/* 게임 진행관련 변수 */
+	BOOL m_bGameStart = false;
 };

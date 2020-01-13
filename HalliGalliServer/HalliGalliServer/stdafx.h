@@ -59,6 +59,15 @@ using namespace std;
 #define UM_ACCEPT	WM_USER+1
 #define UM_RECEIVE	WM_USER+2
 
+// 이벤트 처리 
+#define SOC_INITGAME		0	// 전송 데이터: 나눠줄 카드 데이터(CARD 구조체 데이터)
+#define SOC_GAMESTART		1	// 전송 데이터: X
+#define SOC_GAMEEND			2	// 전송 데이터: X
+#define SOC_TEXT			3	// 전송 데이터: 보내는 문자열(m_strSend)
+#define SOC_THROWNCARD		4	// 전송 데이터: 내는 카드
+#define SOC_BELL			5	// 전송 데이터: X
+#define SOC_TAKECARD		6	// 전송 데이터: 가지게 되는 카드 개수?
+
 #define DEFAULT_PORT	5000
 #define DEFAULT_IP		"127.0.0.1"
 
@@ -67,5 +76,19 @@ using namespace std;
 #include "Macro.h"
 
 #include "ImageMgr.h" // 이미지 관리 클래스
+
+#define CARD_CNT 28
+#define CARD_HALF_CNT 14
+
+#define MID_STR		128
+#define MAX_STR		256
+
+#define _CONSOLE	
+
+#ifdef _CONSOLE
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#include <iostream>
+#endif
+
 
 #pragma warning(disable : 4985)

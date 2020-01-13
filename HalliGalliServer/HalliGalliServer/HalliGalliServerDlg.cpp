@@ -58,6 +58,13 @@ CHalliGalliServerDlg::CHalliGalliServerDlg(CWnd* pParent /*=NULL*/)
 void CHalliGalliServerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+
+
+	DDX_Control(pDX, IDC_IMG_BELL, m_BellPicCtrl);
+	DDX_Control(pDX, IDC_IMG_OTHER_OWN, m_CardPicCtrl[USER_OTHER][OWN]);
+	DDX_Control(pDX, IDC_IMG_OTHER_THROWN, m_CardPicCtrl[USER_OTHER][THROWN]);
+	DDX_Control(pDX, IDC_IMG_PLAYER_OWN, m_CardPicCtrl[USER_PLAYER][OWN]);
+	DDX_Control(pDX, IDC_IMG_PLAYER_THROWN, m_CardPicCtrl[USER_PLAYER][THROWN]);
 }
 
 BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
@@ -105,6 +112,9 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 	/* 이미지 관리 매니저 초기화 => Image폴더 내의 이미지 로드함 */
 	m_pImgMgr = CImageMgr::GetInstance();
 	m_pImgMgr->Initialize();
+
+	/* Picture Ctrl 초기화 */
+	InitPicCtrl();
 
 	/* 소켓 초기화 */
 	InitSocket();
@@ -181,6 +191,11 @@ LPARAM CHalliGalliServerDlg::OnAccept(UINT wParam, LPARAM lParam)
 	m_pSocCom->Init(this->m_hWnd);
 
 	//UpdateData(FALSE);
+
+	// 클라이언트 연결 후 게임 초기화
+	m_bConnect = TRUE;
+	InitGame();
+
 	return TRUE;
 }
 
@@ -196,4 +211,133 @@ void CHalliGalliServerDlg::InitSocket()
 	m_socServer.Create(DEFAULT_PORT);
 	m_socServer.Listen();
 	m_socServer.Init(this->m_hWnd);
+}
+
+void CHalliGalliServerDlg::SendGame(int iType, CString strTemp)
+{
+	char pTemp[MAX_STR];
+
+	memset(pTemp, '\0', MAX_STR);
+	sprintf_s(pTemp, "%d%s", iType, strTemp.GetString());
+
+	m_pSocCom->Send(pTemp, MAX_STR);
+}
+
+void CHalliGalliServerDlg::InitPicCtrl()
+{
+	ChangeCardImage(USER_PLAYER, OWN);
+	ChangeCardImage(USER_OTHER, OWN);
+
+	CImage* pImage = nullptr;
+
+	pImage = m_pImgMgr->GetImage("Bell");
+	if(pImage != nullptr)
+		m_BellPicCtrl.SetBitmap(*pImage);
+}
+
+void CHalliGalliServerDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus, const CARD & tCard)
+{
+	CImage* pImage = m_pImgMgr->GetCardImage(tCard.iFruitID, tCard.iFruitCnt);
+
+	if (pImage != nullptr)
+		m_CardPicCtrl[eID][eStatus].SetBitmap(*pImage);
+}
+
+void CHalliGalliServerDlg::InitCardDeck()
+{
+	// 1:체리 2:배 카드 덱 초기화
+	int nIndex = 0;
+	for (int i = 1; i <= 2; i++)
+	{
+		for (int j = 1; j <= 5; j++)
+		{
+			if (j == 1)
+			{
+				for (int k = 0; k < 5; k++)
+				{
+					m_cardDec[nIndex].iFruitID = i;
+					m_cardDec[nIndex].iFruitCnt = j;
+					nIndex++;
+				}
+			}
+			else if (j == 4)
+			{
+				for (int k = 0; k < 2; k++)
+				{
+					m_cardDec[nIndex].iFruitID = i;
+					m_cardDec[nIndex].iFruitCnt = j;
+					nIndex++;
+				}
+			}
+			else if (j == 5)
+			{
+				m_cardDec[nIndex].iFruitID = i;
+				m_cardDec[nIndex].iFruitCnt = j;
+				nIndex++;
+			}
+			else
+			{
+				for (int k = 0; k < 3; k++)
+				{
+					m_cardDec[nIndex].iFruitID = i;
+					m_cardDec[nIndex].iFruitCnt = j;
+					nIndex++;
+				}
+			}
+
+		}
+	}
+
+	// 인덱스 셔플 
+	for (int i = 0; i < CARD_CNT; i++)
+		m_shuffleCardIndex[i] = i;
+
+	int nRandomIndex1 = 0;
+	int nRandomIndex2 = 0;
+
+	srand((unsigned int)time(NULL));
+
+	for (int i = 0; i < 84; i++)
+	{
+		nRandomIndex1 = rand() % CARD_CNT;
+		nRandomIndex2 = rand() % CARD_CNT;
+
+		int nTemp = 0;
+		nTemp = m_shuffleCardIndex[nRandomIndex1];
+		m_shuffleCardIndex[nRandomIndex1] = m_shuffleCardIndex[nRandomIndex2];
+		m_shuffleCardIndex[nRandomIndex2] = nTemp;
+	}
+}
+
+void CHalliGalliServerDlg::SendCardToClient()
+{
+	for (int i = 0; i < CARD_HALF_CNT; ++i)
+	{
+		int iSuffleIndex = m_shuffleCardIndex[i];
+		CARD tCard = m_cardDec[iSuffleIndex];
+
+		char pCardInfo[MID_STR] = "";
+
+		sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
+
+#ifdef _CONSOLE
+		cout << pCardInfo << endl;
+#endif
+
+		SendGame(SOC_INITGAME, pCardInfo);
+	}
+
+	/* 카드를 다 보내고 나면 준비 완료 */
+	SendGame(SOC_GAMESTART);
+}
+
+void CHalliGalliServerDlg::InitGame()
+{
+	if (!m_bConnect)
+		return;
+
+	/* 카드 덱 초기화 및 섞기 */
+	InitCardDeck();
+	/* 클라이언트에 카드 보냄 */
+	SendCardToClient();
 }

@@ -45,9 +45,10 @@ void CGameDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CGameDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_STATIC_GAIN, &CGameDlg::OnStnClickedStaticGain)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CGameDlg::OnClieckedImgPlayerOwn)
-	ON_STN_CLICKED(IDC_IMG_OTHER_OWN, &CGameDlg::OnClickedImgOtherOwn)
+	
 	ON_BN_CLICKED(IDC_BUTTON_SUB, &CGameDlg::OnBnClickedButtonSub)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
+	ON_STN_CLICKED(IDC_IMG_BELL, &CGameDlg::OnStnClickedImgBell)
 END_MESSAGE_MAP()
 
 BOOL CGameDlg::OnInitDialog()
@@ -99,6 +100,9 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		//cout << "게임 준비 완료" << endl;
 		break;
 	case SOC_THROWNCARD:
+		CARD tCard;
+
+		
 		break;
 	case SOC_BELL:
 		break;
@@ -157,37 +161,17 @@ void CGameDlg::OnClieckedImgPlayerOwn()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	
+	// 자신이 낸 카드 이미지 처리
 	CARD tCard;
 	
-	tCard.iFruitID = FRUIT_CHEERY;
-	tCard.iFruitCnt = 1;
+	tCard.iFruitID = m_lstMyCard.back().iFruitID;
+	tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
 	addMyThrownCard(tCard);
-
-	ChangeCardImage(USER_PLAYER, THROWN, m_lstMyThrownCard.back());
-	
+	m_lstMyCard.pop_back();
+	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+	//SendGame(SOC_THROWNCARD);
 }
 
-
-void CGameDlg::OnClickedImgOtherOwn()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	static bool bTemp2 = false;
-	CARD tCard;
-	if (bTemp2)
-	{
-		tCard.iFruitID = FRUIT_PEAR;
-		tCard.iFruitCnt = 3;
-		ChangeCardImage(USER_OTHER, THROWN, tCard);
-	}
-	else
-	{
-		tCard.iFruitID = FRUIT_CHEERY;
-		tCard.iFruitCnt = 2;
-		ChangeCardImage(USER_OTHER, THROWN, tCard);
-	}
-
-	bTemp2 = !bTemp2;
-}
 
 void CGameDlg::OnStnClickedStaticGain()
 {
@@ -290,4 +274,30 @@ void CGameDlg::deleteAllOtherThrownCard()
 	{
 		m_lstOtherThrownCard.clear();
 	}
+}
+
+
+void CGameDlg::OnStnClickedImgBell()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	CheckFive();
+	if (m_bWin)
+	{
+		Win();
+		SendGame(SOC_BELL);
+	}
+}
+
+void CGameDlg::CheckFive()
+{
+	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
+		m_bWin = TRUE;
+
+}
+
+void CGameDlg::Win()
+{
+	deleteAllMyThrownCard();
+	deleteAllOtherThrownCard();
+	m_bWin = FALSE;
 }

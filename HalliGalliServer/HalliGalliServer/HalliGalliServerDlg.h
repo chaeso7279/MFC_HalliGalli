@@ -79,9 +79,19 @@ public:
 
 	list<CARD> m_lstMyCard;
 	list<CARD> m_lstMyThrownCard;
-	list<CARD> m_lstOtherThorwnCard;
+	list<CARD> m_lstOtherThrownCard;
 
 public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartCnt = FALSE;
+	BOOL m_bWin = FALSE;
+
+	void CheckFive();
+	void Win();
+	void addMyThrownCard(const CARD sCard);
+	void deleteAllMyThrownCard();
+	void addOtherThrownCard(const CARD sCard);
+	void deleteAllOtherThrownCard();
+
+	afx_msg void OnStnClickedImgPlayerOwn();
 };

@@ -23,6 +23,9 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
+
+
+
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
@@ -40,12 +43,10 @@ public:
 
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = {FRUIT_BACK, 1});
 	
-	afx_msg void OnClieckedImgPlayerOwn(); // 카드 이미지 교체 테스트
+//	afx_msg void OnClieckedImgPlayerOwn(); // 카드 이미지 교체 테스트
 
 public:
 	virtual void OnCancel();
-
-	afx_msg void OnStnClickedStaticGain();
 
 public:
 	/* 소켓 관련 변수 */
@@ -62,9 +63,16 @@ public:
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 
 public:
-	CString m_strCardCount;
 	CString m_strGain;
-	CStatic m_strMe;
 	CString m_strSend;
-	afx_msg void OnClickedImgOtherOwn();
+	CEdit m_strWholeCountNum;
+	CEdit m_strCardCountNum;
+	CStatic m_strCardCount;
+	CStatic m_strWholeCount;
+	CString m_strMe;
+	afx_msg void OnBnClickedButtonSend();
+	void SendChat(int iType, CString strTmp);
+	afx_msg void OnClickedImgPlayerOwn();
+
+
 };

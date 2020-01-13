@@ -301,11 +301,13 @@ void CGameDlg::deleteAllOtherThrownCard()
 void CGameDlg::OnStnClickedImgBell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	SendGame(SOC_BELL);
 	CheckFive();
 	if (m_bWin)
 	{
 		Win();
 		SendGame(SOC_BELL);
+		//SOC_TAKECARD
 	}
 }
 

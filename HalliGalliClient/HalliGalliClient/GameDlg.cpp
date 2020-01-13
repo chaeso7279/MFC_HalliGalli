@@ -43,11 +43,11 @@ void CGameDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CGameDlg, CDialogEx)
-	ON_MESSAGE(UM_RECEIVE, OnReceive)
 	ON_STN_CLICKED(IDC_STATIC_GAIN, &CGameDlg::OnStnClickedStaticGain)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CGameDlg::OnClieckedImgPlayerOwn)
 	ON_STN_CLICKED(IDC_IMG_OTHER_OWN, &CGameDlg::OnClickedImgOtherOwn)
 	ON_BN_CLICKED(IDC_BUTTON_SUB, &CGameDlg::OnBnClickedButtonSub)
+	ON_MESSAGE(UM_RECEIVE, OnReceive)
 END_MESSAGE_MAP()
 
 BOOL CGameDlg::OnInitDialog()
@@ -78,6 +78,38 @@ BOOL CGameDlg::DestroyWindow()
 
 LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 {
+	char pTemp[MAX_STR];
+	CString strTemp;
+
+	memset(pTemp, '\0', MAX_STR);
+	m_pSocCom->Receive(pTemp, MAX_STR);
+
+	strTemp.Format("%c", pTemp[0]);
+	int iType = atoi(strTemp.GetString());
+
+	switch (iType)
+	{
+	case SOC_INITGAME:
+		/* 서버로부터 카드 받기 */
+		if (ReceiveCard(pTemp + 1) == TRUE)
+			SendGame(SOC_GAMESTART);
+		break;
+	case SOC_GAMESTART:
+		m_bStartSvr = TRUE;
+		//cout << "게임 준비 완료" << endl;
+		break;
+	case SOC_THROWNCARD:
+		break;
+	case SOC_BELL:
+		break;
+	case SOC_TAKECARD:
+		break;
+	case SOC_TEXT:
+		break;
+	case SOC_GAMEEND:
+		break;
+	}
+
 	return TRUE;
 }
 
@@ -90,7 +122,20 @@ void CGameDlg::InitSocket(CSocCom * pSocCom)
 	}
 
 	m_pSocCom = pSocCom;
+	m_pSocCom->Init(this->m_hWnd);
 
+	m_bConnect = TRUE;
+	//InitGame(); // 서버와 연결 후 게임 초기화
+}
+
+void CGameDlg::SendGame(int iType, CString strTemp)
+{
+	char pTemp[MAX_STR];
+
+	memset(pTemp, '\0', MAX_STR);
+	sprintf_s(pTemp, "%d%s", iType, strTemp.GetString());
+
+	m_pSocCom->Send(pTemp, MAX_STR);
 }
 
 void CGameDlg::InitPicCtrl()
@@ -166,6 +211,31 @@ void CGameDlg::OnBnClickedButtonSub()
 
 
 	ChangeCardImage(USER_OTHER, THROWN, m_lstMyThrownCard.front());
+}
+
+void CGameDlg::InitGame()
+{
+}
+
+BOOL CGameDlg::ReceiveCard(const char* pCardInfo)
+{
+	/* 카드 다 받으면 게임 Start */
+	CARD tCard; 
+	CString strFruitID, strFruitCnt; 
+	
+	strFruitID.Format("%c", pCardInfo[0]);
+	strFruitCnt.Format("%c", pCardInfo[1]);
+
+	tCard.iFruitID = atoi(strFruitID.GetString());
+	tCard.iFruitCnt = atoi(strFruitCnt.GetString());
+
+	m_lstMyCard.push_back(tCard);
+
+	/* 카드 개수가 14이면 TRUE, 아니면 FALSE 리턴 */
+	if (m_lstMyCard.size() == CARD_HALF_CNT)
+		return TRUE;
+	else
+		return FALSE;
 }
 
 void CGameDlg::addMyThrownCard(const CARD sCard)

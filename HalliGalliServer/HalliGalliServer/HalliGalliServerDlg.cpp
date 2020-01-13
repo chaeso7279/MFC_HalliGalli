@@ -201,6 +201,33 @@ LPARAM CHalliGalliServerDlg::OnAccept(UINT wParam, LPARAM lParam)
 
 LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 {
+	char pTemp[MAX_STR];
+	CString strTemp;
+
+	memset(pTemp, '\0', MAX_STR);
+	m_pSocCom->Receive(pTemp, MAX_STR);
+
+	strTemp.Format("%c", pTemp[0]);
+	int iType = atoi(strTemp.GetString());
+
+	switch (iType)
+	{
+	case SOC_GAMESTART:
+		m_bStartCnt = TRUE;
+		cout << "게임 준비 완료" << endl;
+		break;
+	case SOC_THROWNCARD:
+		break;
+	case SOC_BELL:
+		break;
+	case SOC_TAKECARD:
+		break;
+	case SOC_TEXT:
+		break;
+	case SOC_GAMEEND:
+		break;
+	}
+
 	return TRUE;
 }
 
@@ -327,7 +354,16 @@ void CHalliGalliServerDlg::SendCardToClient()
 		SendGame(SOC_INITGAME, pCardInfo);
 	}
 
-	/* 카드를 다 보내고 나면 준비 완료 */
+	/* 클라에 카드 보낸 후 내 카드 저장 */
+	for (int i = CARD_HALF_CNT; i < CARD_CNT; ++i)
+	{
+		int iSuffleIndex = m_shuffleCardIndex[i];
+		CARD tCard = m_cardDec[iSuffleIndex];
+
+		m_lstMyCard.push_back(tCard);
+	}
+
+	/* 카드를 다 보내고 나면 GAMESTART 메시지를 클라에 보냄 */
 	SendGame(SOC_GAMESTART);
 }
 

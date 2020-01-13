@@ -22,7 +22,7 @@ public:
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
-
+	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL OnInitDialog();
@@ -30,9 +30,9 @@ public:
 
 public:
 	/* 소켓 관련 함수 */
-	LPARAM OnReceive(UINT wParam, LPARAM lParam);
-
+	
 	void InitSocket(CSocCom* pSocCom);
+	void SendGame(int iType, CString strTemp = "");
 
 public:
 	/* 이미지 관련 함수 */
@@ -41,6 +41,14 @@ public:
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = {FRUIT_BACK, 1});
 	
 	afx_msg void OnClieckedImgPlayerOwn(); // 카드 이미지 교체 테스트
+	afx_msg void OnClickedImgOtherOwn();
+
+	afx_msg void OnBnClickedButtonSub();
+
+public:
+	/* 게임 진행 관련 함수 */
+	void InitGame();
+	BOOL ReceiveCard(const char* pCardInfo);
 
 public:
 	virtual void OnCancel();
@@ -50,6 +58,8 @@ public:
 public:
 	/* 소켓 관련 변수 */
 	CSocCom* m_pSocCom = nullptr;
+
+	BOOL m_bConnect = FALSE;
 
 public:
 	CListBox m_list;
@@ -66,13 +76,16 @@ public:
 	CString m_strGain;
 	CStatic m_strMe;
 	CString m_strSend;
-	afx_msg void OnClickedImgOtherOwn();
-	afx_msg void OnBnClickedButtonSub();
+
 
 public:
+	list<CARD> m_lstMyCard;
 	list<CARD> m_lstMyThrownCard;
 	list<CARD> m_lstOtherThrownCard;
-	list<CARD> m_lstMyCard;
+
+public:
+	/* 게임 진행관련 변수 */
+	BOOL m_bStartSvr = FALSE;
 	BOOL m_bWin;
 
 	void addMyThrownCard(const CARD sCard);

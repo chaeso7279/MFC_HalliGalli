@@ -35,15 +35,14 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg LPARAM OnAccept(UINT wParam, LPARAM lParam);
+	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL DestroyWindow();
 
 public:
 	/* 소켓 관련 함수 */
-	afx_msg LPARAM OnAccept(UINT wParam, LPARAM lParam);
-	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
-
 	void InitSocket();
 	void SendGame(int iType, CString strTemp = "");
 
@@ -84,5 +83,5 @@ public:
 
 public:
 	/* 게임 진행관련 변수 */
-	BOOL m_bGameStart = false;
+	BOOL m_bStartCnt = FALSE;
 };

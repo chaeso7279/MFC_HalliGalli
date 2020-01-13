@@ -30,7 +30,6 @@ public:
 
 public:
 	/* 소켓 관련 함수 */
-	
 	void InitSocket(CSocCom* pSocCom);
 	void SendGame(int iType, CString strTemp = "");
 
@@ -50,10 +49,13 @@ public:
 	void InitGame();
 	BOOL ReceiveCard(const char* pCardInfo);
 
+	void addMyThrownCard(const CARD sCard);
+	void deleteAllMyThrownCard();
+	void addOtherThrownCard(const CARD sCard);
+	void deleteAllOtherThrownCard();
+
 public:
 	virtual void OnCancel();
-
-	afx_msg void OnStnClickedStaticGain();
 
 public:
 	/* 소켓 관련 변수 */
@@ -72,11 +74,12 @@ public:
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 
 public:
-	CString m_strCardCount;
-	CString m_strGain;
-	CStatic m_strMe;
-	CString m_strSend;
+	/* 채팅 관련 함수 */
+	afx_msg void OnBnClickedButtonSend();
 
+public:
+	CString m_strGain;
+	CString m_strSend;
 
 public:
 	list<CARD> m_lstMyCard;
@@ -88,8 +91,9 @@ public:
 	BOOL m_bStartSvr = FALSE;
 	BOOL m_bWin;
 
-	void addMyThrownCard(const CARD sCard);
-	void deleteAllMyThrownCard();
-	void addOtherThrownCard(const CARD sCard);
-	void deleteAllOtherThrownCard();
+	CEdit m_strWholeCountNum;
+	CEdit m_strCardCountNum;
+	CStatic m_strCardCount;
+	CStatic m_strWholeCount;
+	CString m_strMe;
 };

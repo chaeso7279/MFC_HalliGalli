@@ -8,18 +8,24 @@
 
 #include "IntroDlg.h"
 
+int wcnt = 5;
+int ccnt = 5;
+
 // CGameDlg 대화 상자입니다.
 
 IMPLEMENT_DYNAMIC(CGameDlg, CDialogEx)
 
 CGameDlg::CGameDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_GAME_DLG, pParent)
-	, m_strCardCount(_T(""))
+	//, m_strWholeCount(_T(""))
+	//, m_strCardCount(_T(""))
+	//, m_strWholeCountNum(_T(""))
+	//, m_strCardCountNum(_T(""))
 	, m_strGain(_T(""))
 	, m_strSend(_T(""))
 	, m_bWin{}
+	, m_strMe(_T(""))
 {
-
 }
 
 CGameDlg::~CGameDlg()
@@ -29,23 +35,27 @@ CGameDlg::~CGameDlg()
 void CGameDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_STATIC_CARDCOUNT, m_strCardCount);
 	DDX_Text(pDX, IDC_STATIC_GAIN, m_strGain);
-	DDX_Control(pDX, IDC_STATIC_ME, m_strMe);
-	DDX_Control(pDX, IDC_LIST1, m_list);
 	DDX_Text(pDX, IDC_EDIT_SEND, m_strSend);
+	DDX_Text(pDX, IDC_STATIC_ME, m_strMe);
+	DDX_Control(pDX, IDC_LIST1, m_list);
 	DDX_Control(pDX, IDC_IMG_BELL, m_BellPicCtrl);
 	DDX_Control(pDX, IDC_IMG_OTHER_OWN, m_CardPicCtrl[USER_OTHER][OWN]);
 	DDX_Control(pDX, IDC_IMG_OTHER_THROWN, m_CardPicCtrl[USER_OTHER][THROWN]);
 	DDX_Control(pDX, IDC_IMG_PLAYER_OWN, m_CardPicCtrl[USER_PLAYER][OWN]);
 	DDX_Control(pDX, IDC_IMG_PLAYER_THROWN, m_CardPicCtrl[USER_PLAYER][THROWN]);
+	DDX_Control(pDX, IDC_STATIC_CARDCOUNT, m_strCardCount);
+	DDX_Control(pDX, IDC_STATIC_WHOLECOUNT, m_strWholeCount);
+	DDX_Control(pDX, IDC_EDIT_WHOLECOUNTNUM, m_strWholeCountNum);
+	DDX_Control(pDX, IDC_EDIT_CARDCOUNTNUM, m_strCardCountNum);
 }
 
 
 BEGIN_MESSAGE_MAP(CGameDlg, CDialogEx)
-	ON_STN_CLICKED(IDC_STATIC_GAIN, &CGameDlg::OnStnClickedStaticGain)
+	//ON_STN_CLICKED(IDC_STATIC_GAIN, &CGameDlg::OnStnClickedStaticGain)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CGameDlg::OnClieckedImgPlayerOwn)
 	ON_STN_CLICKED(IDC_IMG_OTHER_OWN, &CGameDlg::OnClickedImgOtherOwn)
+	ON_BN_CLICKED(IDC_BUTTON_SEND, &CGameDlg::OnBnClickedButtonSend)
 	ON_BN_CLICKED(IDC_BUTTON_SUB, &CGameDlg::OnBnClickedButtonSub)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
 END_MESSAGE_MAP()
@@ -152,46 +162,24 @@ void CGameDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus,
 		m_CardPicCtrl[eID][eStatus].SetBitmap(*pImage);
 }
 
-// CGameDlg 메시지 처리기입니다.
+
 void CGameDlg::OnClieckedImgPlayerOwn()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	
-	CARD tCard;
-	
-	tCard.iFruitID = FRUIT_CHEERY;
-	tCard.iFruitCnt = 1;
-	addMyThrownCard(tCard);
+	SetDlgItemInt(IDC_EDIT_WHOLECOUNTNUM, wcnt);
+	SetDlgItemInt(IDC_EDIT_CARDCOUNTNUM, ccnt);
 
+	addMyThrownCard(m_lstMyCard.back());
 	ChangeCardImage(USER_PLAYER, THROWN, m_lstMyThrownCard.back());
-	
-}
 
+	wcnt--;
+	ccnt--;
+}
 
 void CGameDlg::OnClickedImgOtherOwn()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	static bool bTemp2 = false;
-	CARD tCard;
-	if (bTemp2)
-	{
-		tCard.iFruitID = FRUIT_PEAR;
-		tCard.iFruitCnt = 3;
-		ChangeCardImage(USER_OTHER, THROWN, tCard);
-	}
-	else
-	{
-		tCard.iFruitID = FRUIT_CHEERY;
-		tCard.iFruitCnt = 2;
-		ChangeCardImage(USER_OTHER, THROWN, tCard);
-	}
-
-	bTemp2 = !bTemp2;
-}
-
-void CGameDlg::OnStnClickedStaticGain()
-{
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	
 }
 
 void CGameDlg::OnCancel()
@@ -202,6 +190,17 @@ void CGameDlg::OnCancel()
 
 	/* 인트로 다이얼로그 삭제 */
 	g_pIntroDlg->DestroyWindow();
+}
+
+void CGameDlg::OnBnClickedButtonSend()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	SendGame(SOC_TEXT, m_strSend);
+	
+	m_list.AddString(">>" + m_strSend);
+	m_strSend = (_T(""));
+	UpdateData(FALSE);
 }
 
 void CGameDlg::OnBnClickedButtonSub()
@@ -240,8 +239,7 @@ BOOL CGameDlg::ReceiveCard(const char* pCardInfo)
 
 void CGameDlg::addMyThrownCard(const CARD sCard)
 {
-	m_lstMyThrownCard.push_back(sCard);
-	
+	m_lstMyThrownCard.push_back(sCard);	
 }
 
 void CGameDlg::deleteAllMyThrownCard()

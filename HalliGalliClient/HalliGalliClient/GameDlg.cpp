@@ -17,6 +17,7 @@ CGameDlg::CGameDlg(CWnd* pParent /*=NULL*/)
 	, m_strCardCount(_T(""))
 	, m_strGain(_T(""))
 	, m_strSend(_T(""))
+	, m_bWin{}
 {
 
 }
@@ -46,6 +47,7 @@ BEGIN_MESSAGE_MAP(CGameDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_STATIC_GAIN, &CGameDlg::OnStnClickedStaticGain)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CGameDlg::OnClieckedImgPlayerOwn)
 	ON_STN_CLICKED(IDC_IMG_OTHER_OWN, &CGameDlg::OnClickedImgOtherOwn)
+	ON_BN_CLICKED(IDC_BUTTON_SUB, &CGameDlg::OnBnClickedButtonSub)
 END_MESSAGE_MAP()
 
 BOOL CGameDlg::OnInitDialog()
@@ -88,6 +90,7 @@ void CGameDlg::InitSocket(CSocCom * pSocCom)
 	}
 
 	m_pSocCom = pSocCom;
+
 }
 
 void CGameDlg::InitPicCtrl()
@@ -108,22 +111,15 @@ void CGameDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus,
 void CGameDlg::OnClieckedImgPlayerOwn()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	static bool bTemp = false;
+	
 	CARD tCard;
-	if (bTemp)
-	{
-		tCard.iFruitID = FRUIT_CHEERY;
-		tCard.iFruitCnt = 1;
-		ChangeCardImage(USER_PLAYER, THROWN, tCard);
-	}
-	else
-	{
-		tCard.iFruitID = FRUIT_PEAR;
-		tCard.iFruitCnt = 5;
-		ChangeCardImage(USER_PLAYER, THROWN, tCard);
-	}
+	
+	tCard.iFruitID = FRUIT_CHEERY;
+	tCard.iFruitCnt = 1;
+	addMyThrownCard(tCard);
 
-	bTemp = !bTemp;
+	ChangeCardImage(USER_PLAYER, THROWN, m_lstMyThrownCard.back());
+	
 }
 
 
@@ -161,4 +157,67 @@ void CGameDlg::OnCancel()
 
 	/* 인트로 다이얼로그 삭제 */
 	g_pIntroDlg->DestroyWindow();
+}
+
+void CGameDlg::OnBnClickedButtonSub()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	deleteAllMyThrownCard();
+
+
+	ChangeCardImage(USER_OTHER, THROWN, m_lstMyThrownCard.front());
+}
+
+void CGameDlg::addMyThrownCard(const CARD sCard)
+{
+	m_lstMyThrownCard.push_back(sCard);
+	
+}
+
+void CGameDlg::deleteAllMyThrownCard()
+{
+	int nThrowCardCount = 0;
+	//내가 이겼을 때
+	if (m_bWin)
+	{
+		nThrowCardCount = m_lstMyThrownCard.size();
+
+		for (int i = 0; i < nThrowCardCount; i++)
+		{
+			m_lstMyCard.push_back(m_lstMyThrownCard.back());
+			m_lstMyThrownCard.pop_back();
+		}
+	}
+	//졌을 때
+	else
+	{
+		m_lstMyThrownCard.clear();
+	}
+	
+}
+
+void CGameDlg::addOtherThrownCard(const CARD sCard)
+{
+	m_lstOtherThrownCard.push_back(sCard);
+}
+
+void CGameDlg::deleteAllOtherThrownCard()
+{
+	int nThrowCardCount = 0;
+	//내가 이겼을때
+	if (m_bWin)
+	{
+		nThrowCardCount = m_lstOtherThrownCard.size();
+
+		for (int i = 0; i < nThrowCardCount; i++)
+		{
+			m_lstMyCard.push_back(m_lstOtherThrownCard.back());
+			m_lstOtherThrownCard.pop_back();
+		}
+	}
+	//내가 졌을때
+	else
+	{
+		m_lstOtherThrownCard.clear();
+	}
 }

@@ -5,6 +5,7 @@
 #pragma once
 
 #include "SocSvr.h"
+#include "PictureEx.h"
 
 // CHalliGalliServerDlg 대화 상자
 class CHalliGalliServerDlg : public CDialogEx
@@ -59,8 +60,8 @@ public:
 	void InitCardDeck(); // 카드 초기화 및 셔플 함수
 	void SendCardToClient(); // 섞은 카드 클라에 보내는 함수
 
-	void CheckFive();
-	void Win();
+	void CheckThrownCard(); // THROWN CARD 5개인지 검사
+	void TakeThrownCard(); // 종을 먼저 쳐서 카드를 모두 가져감
 	
 	void AddMyThrownCard(const CARD sCard);
 	void AddOtherThrownCard(const CARD sCard);
@@ -80,8 +81,8 @@ public:
 
 public:
 	/* 이미지 관련 변수 */
-	CStatic m_BellPicCtrl; // 종 이미지 컨트롤
-	CStatic m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
+	CPictureEx m_BellPicCtrl; // 종 이미지 컨트롤
+	CPictureEx m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
 
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 	
@@ -98,7 +99,7 @@ public:
 public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartCnt = FALSE;
-	BOOL m_bWin = FALSE;
+	BOOL m_bTakeCard = FALSE;
 
 	CEdit m_strCardCountNum;
 	CEdit m_strWholeCountNum;

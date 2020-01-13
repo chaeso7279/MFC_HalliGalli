@@ -55,7 +55,7 @@ CHalliGalliServerDlg::CHalliGalliServerDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_HALLIGALLISERVER_DIALOG, pParent)
 	, m_strGain(_T(""))
 	, m_strSend(_T(""))
-	, m_bWin{}
+	, m_bTakeCard{}
 	, m_strMe(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -296,6 +296,11 @@ void CHalliGalliServerDlg::InitPicCtrl()
 	ChangeCardImage(USER_PLAYER, OWN);
 	ChangeCardImage(USER_OTHER, OWN);
 
+	CARD tCard = { FRUIT_BACK, 2 };
+
+	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+	ChangeCardImage(USER_OTHER, THROWN, tCard);
+
 	CImage* pImage = nullptr;
 
 	pImage = m_pImgMgr->GetImage("Bell");
@@ -415,17 +420,17 @@ void CHalliGalliServerDlg::SendCardToClient()
 	SendGame(SOC_GAMESTART);
 }
 
-void CHalliGalliServerDlg::CheckFive()
+void CHalliGalliServerDlg::CheckThrownCard()
 {
 	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
-		m_bWin = TRUE;
+		m_bTakeCard = TRUE;
 }
 
-void CHalliGalliServerDlg::Win()
+void CHalliGalliServerDlg::TakeThrownCard()
 {
 	DeleteAllMyThrownCard();
 	DeleteAllOtherThrownCard();
-	m_bWin = FALSE;
+	m_bTakeCard = FALSE;
 }
 
 void CHalliGalliServerDlg::AddMyThrownCard(const CARD sCard)
@@ -442,7 +447,7 @@ void CHalliGalliServerDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을 때
-	if (m_bWin)
+	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstMyThrownCard.size();
 
@@ -464,7 +469,7 @@ void CHalliGalliServerDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을때
-	if (m_bWin)
+	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstOtherThrownCard.size();
 

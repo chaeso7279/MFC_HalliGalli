@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "PictureEx.h"
 // CGameDlg 대화 상자입니다.
 
 class CGameDlg : public CDialogEx
@@ -47,8 +48,8 @@ public:
 	void InitGame();
 	BOOL ReceiveCard(const char* pCardInfo);
 
-	void CheckFive();
-	void Win();
+	void CheckThrownCard(); // THROWN CARD 5개인지 검사
+	void TakeThrownCard(); // 종을 먼저 쳐서 카드를 모두 가져감
 
 	void AddMyThrownCard(const CARD sCard);
 	void AddOtherThrownCard(const CARD sCard);
@@ -67,8 +68,8 @@ public:
 
 public:
 	/* 이미지 관련 변수 */
-	CStatic m_BellPicCtrl; // 종 이미지 컨트롤
-	CStatic m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
+	CPictureEx m_BellPicCtrl; // 종 이미지 컨트롤
+	CPictureEx m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
 
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 	
@@ -81,7 +82,7 @@ public:
 public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartSvr = FALSE;
-	BOOL m_bWin = FALSE;
+	BOOL m_bTakeCard = FALSE;
 
 	CEdit m_strWholeCountNum;
 	CEdit m_strCardCountNum;

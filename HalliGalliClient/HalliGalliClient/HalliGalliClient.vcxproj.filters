@@ -29,6 +29,9 @@
     <Filter Include="03. ConnectDlg">
       <UniqueIdentifier>{4fa28d76-1208-415d-81f5-c8dae9e5aafd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. PictureEX">
+      <UniqueIdentifier>{a2a43cab-f1c5-41c1-93eb-37625104ca4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliClient.h">
@@ -64,6 +67,9 @@
     <ClInclude Include="ConnectDlg.h">
       <Filter>03. ConnectDlg</Filter>
     </ClInclude>
+    <ClInclude Include="PictureEx.h">
+      <Filter>06. PictureEX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliClient.cpp">
@@ -86,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="ConnectDlg.cpp">
       <Filter>03. ConnectDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="PictureEx.cpp">
+      <Filter>06. PictureEX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -23,7 +23,7 @@ CGameDlg::CGameDlg(CWnd* pParent /*=NULL*/)
 	//, m_strCardCountNum(_T(""))
 	, m_strGain(_T(""))
 	, m_strSend(_T(""))
-	, m_bWin{}
+	, m_bTakeCard{}
 	, m_strMe(_T(""))
 {
 }
@@ -173,6 +173,17 @@ void CGameDlg::InitPicCtrl()
 {
 	ChangeCardImage(USER_PLAYER, OWN);
 	ChangeCardImage(USER_OTHER, OWN);
+
+	CARD tCard = { FRUIT_BACK, 2 };
+
+	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+	ChangeCardImage(USER_OTHER, THROWN, tCard);
+
+	CImage* pImage = nullptr;
+
+	pImage = m_pImgMgr->GetImage("Bell");
+	if (pImage != nullptr)
+		m_BellPicCtrl.SetBitmap(*pImage);
 }
 
 void CGameDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus, const CARD & tCard)
@@ -255,7 +266,7 @@ void CGameDlg::DeleteAllMyThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을 때
-	if (m_bWin)
+	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstMyThrownCard.size();
 
@@ -282,7 +293,7 @@ void CGameDlg::DeleteAllOtherThrownCard()
 {
 	int nThrowCardCount = 0;
 	//내가 이겼을때
-	if (m_bWin)
+	if (m_bTakeCard)
 	{
 		nThrowCardCount = m_lstOtherThrownCard.size();
 
@@ -304,25 +315,25 @@ void CGameDlg::OnClickedImgBell()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
 	SendGame(SOC_BELL);
-	CheckFive();
-	if (m_bWin)
+	CheckThrownCard();
+	if (m_bTakeCard)
 	{
-		Win();
+		TakeThrownCard();
 		SendGame(SOC_BELL);
 		//SOC_TAKECARD
 	}
 }
 
-void CGameDlg::CheckFive()
+void CGameDlg::CheckThrownCard()
 {
 	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
-		m_bWin = TRUE;
+		m_bTakeCard = TRUE;
 
 }
 
-void CGameDlg::Win()
+void CGameDlg::TakeThrownCard()
 {
 	DeleteAllMyThrownCard();
 	DeleteAllOtherThrownCard();
-	m_bWin = FALSE;
+	m_bTakeCard = FALSE;
 }

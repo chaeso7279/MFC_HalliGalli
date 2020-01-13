@@ -29,6 +29,9 @@
     <Filter Include="03. Socket\01. SocCom">
       <UniqueIdentifier>{14bd762b-8d25-4bbd-8e62-3fd59bf89d0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04. PictureEX">
+      <UniqueIdentifier>{76672f63-03a8-4713-9fbb-89e9bc199ecb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliServer.h">
@@ -61,6 +64,9 @@
     <ClInclude Include="SocSvr.h">
       <Filter>03. Socket\00. SocServer</Filter>
     </ClInclude>
+    <ClInclude Include="PictureEx.h">
+      <Filter>04. PictureEX</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliServer.cpp">
@@ -80,6 +86,9 @@
     </ClCompile>
     <ClCompile Include="SocSvr.cpp">
       <Filter>03. Socket\00. SocServer</Filter>
+    </ClCompile>
+    <ClCompile Include="PictureEx.cpp">
+      <Filter>04. PictureEX</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

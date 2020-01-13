@@ -191,6 +191,7 @@
     <ClInclude Include="HalliGalliServerDlg.h" />
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="Macro.h" />
+    <ClInclude Include="PictureEx.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SocCom.h" />
     <ClInclude Include="SocSvr.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="HalliGalliServer.cpp" />
     <ClCompile Include="HalliGalliServerDlg.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
+    <ClCompile Include="PictureEx.cpp" />
     <ClCompile Include="SocCom.cpp" />
     <ClCompile Include="SocSvr.cpp" />
     <ClCompile Include="stdafx.cpp">

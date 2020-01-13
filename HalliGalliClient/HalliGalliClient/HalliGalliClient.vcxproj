@@ -191,6 +191,7 @@
     <ClInclude Include="ImageMgr.h" />
     <ClInclude Include="IntroDlg.h" />
     <ClInclude Include="Macro.h" />
+    <ClInclude Include="PictureEx.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SocCom.h" />
     <ClInclude Include="stdafx.h" />
@@ -203,6 +204,7 @@
     <ClCompile Include="HalliGalliClient.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="IntroDlg.cpp" />
+    <ClCompile Include="PictureEx.cpp" />
     <ClCompile Include="SocCom.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -51,6 +51,8 @@ public:
 	void InitPicCtrl();
 	
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = { FRUIT_BACK, 1 });
+	
+	afx_msg void OnStnClickedImgPlayerOwn();
 
 public:
 	/* 게임 진행 관련 함수 */
@@ -79,9 +81,17 @@ public:
 
 	list<CARD> m_lstMyCard;
 	list<CARD> m_lstMyThrownCard;
-	list<CARD> m_lstOtherThorwnCard;
+	list<CARD> m_lstOtherThrownCard;
 
 public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartCnt = FALSE;
+	BOOL m_bWin = FALSE;
+
+	void CheckFive();
+	void Win();
+	void addMyThrownCard(const CARD sCard);
+	void deleteAllMyThrownCard();
+	void addOtherThrownCard(const CARD sCard);
+	void deleteAllOtherThrownCard();
 };

@@ -39,9 +39,10 @@ public:
 
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = {FRUIT_BACK, 1});
 	
-	afx_msg void OnClieckedImgPlayerOwn(); // 카드 이미지 교체 테스트
-	afx_msg void OnClickedImgOtherOwn();
+	afx_msg void OnClickedImgPlayerOwn(); // 카드 이미지 교체 테스트
+	afx_msg void OnClickedImgOhterOwn();
 
+	afx_msg void OnStnClickedImgBell();
 	afx_msg void OnBnClickedButtonSub();
 
 public:
@@ -53,6 +54,9 @@ public:
 	void deleteAllMyThrownCard();
 	void addOtherThrownCard(const CARD sCard);
 	void deleteAllOtherThrownCard();
+	void CheckFive();
+	void Win();
+
 
 public:
 	virtual void OnCancel();

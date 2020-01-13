@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(UM_ACCEPT, OnAccept)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
+	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnStnClickedImgPlayerOwn)
 END_MESSAGE_MAP()
 
 
@@ -214,7 +215,6 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 	{
 	case SOC_GAMESTART:
 		m_bStartCnt = TRUE;
-		cout << "게임 준비 완료" << endl;
 		break;
 	case SOC_THROWNCARD:
 		break;
@@ -376,4 +376,86 @@ void CHalliGalliServerDlg::InitGame()
 	InitCardDeck();
 	/* 클라이언트에 카드 보냄 */
 	SendCardToClient();
+}
+
+void CHalliGalliServerDlg::CheckFive()
+{
+	if ((m_lstMyThrownCard.back().iFruitCnt + m_lstOtherThrownCard.back().iFruitCnt) == 5)
+		m_bWin = TRUE;
+
+}
+
+void CHalliGalliServerDlg::Win()
+{
+	deleteAllMyThrownCard();
+	deleteAllOtherThrownCard();
+	m_bWin = FALSE;
+}
+
+void CHalliGalliServerDlg::addMyThrownCard(const CARD sCard)
+{
+	m_lstMyThrownCard.push_back(sCard);
+
+}
+
+void CHalliGalliServerDlg::deleteAllMyThrownCard()
+{
+	int nThrowCardCount = 0;
+	//내가 이겼을 때
+	if (m_bWin)
+	{
+		nThrowCardCount = m_lstMyThrownCard.size();
+
+		for (int i = 0; i < nThrowCardCount; i++)
+		{
+			m_lstMyCard.push_back(m_lstMyThrownCard.back());
+			m_lstMyThrownCard.pop_back();
+		}
+	}
+	//졌을 때
+	else
+	{
+		m_lstMyThrownCard.clear();
+	}
+
+}
+
+void CHalliGalliServerDlg::addOtherThrownCard(const CARD sCard)
+{
+	m_lstOtherThrownCard.push_back(sCard);
+}
+
+void CHalliGalliServerDlg::deleteAllOtherThrownCard()
+{
+	int nThrowCardCount = 0;
+	//내가 이겼을때
+	if (m_bWin)
+	{
+		nThrowCardCount = m_lstOtherThrownCard.size();
+
+		for (int i = 0; i < nThrowCardCount; i++)
+		{
+			m_lstMyCard.push_back(m_lstOtherThrownCard.back());
+			m_lstOtherThrownCard.pop_back();
+		}
+	}
+	//내가 졌을때
+	else
+	{
+		m_lstOtherThrownCard.clear();
+	}
+}
+
+void CHalliGalliServerDlg::OnStnClickedImgPlayerOwn()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	
+	CARD tCard;
+
+	tCard.iFruitID = m_lstMyCard.back().iFruitID;
+	tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
+	addMyThrownCard(tCard);
+	m_lstMyCard.pop_back();
+	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+	
 }

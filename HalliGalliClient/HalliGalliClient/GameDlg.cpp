@@ -96,7 +96,8 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 	strTemp.Format("%c", pTemp[0]);
 	int iType = atoi(strTemp.GetString());
-
+	CString strFruitID;
+	CString	strFruitCnt;
 	switch (iType)
 	{
 	case SOC_INITGAME:
@@ -108,7 +109,18 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		m_bStartSvr = TRUE;
 		//cout << "게임 준비 완료" << endl;
 		break;
-	case SOC_THROWNCARD:		
+	case SOC_THROWNCARD:	
+		CARD tCard;
+	
+		strFruitID.Format("%c", (pTemp+1)[0]);
+		strFruitCnt.Format("%c", (pTemp + 1)[1]);
+
+		tCard.iFruitID = atoi(strFruitID.GetString());
+		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
+
+		addOtherThrownCard(tCard);
+		ChangeCardImage(USER_OTHER, THROWN, tCard);
+		GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(TRUE);
 		break;
 	case SOC_BELL:
 		break;
@@ -169,8 +181,18 @@ void CGameDlg::OnClickedImgPlayerOwn()
 	SetDlgItemInt(IDC_EDIT_WHOLECOUNTNUM, wcnt);
 	SetDlgItemInt(IDC_EDIT_CARDCOUNTNUM, ccnt);
 
-	addMyThrownCard(m_lstMyCard.back());
-	ChangeCardImage(USER_PLAYER, THROWN, m_lstMyThrownCard.back());
+	CARD tCard;
+
+	tCard.iFruitID = m_lstMyCard.back().iFruitID;
+	tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
+	addMyThrownCard(tCard);
+	m_lstMyCard.pop_back();
+	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+
+	char pCardInfo[MID_STR] = "";
+	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
+	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
+	SendGame(SOC_THROWNCARD, pCardInfo);
 
 	wcnt--;
 	ccnt--;

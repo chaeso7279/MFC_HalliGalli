@@ -210,13 +210,25 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 	strTemp.Format("%c", pTemp[0]);
 	int iType = atoi(strTemp.GetString());
-
+	CString strFruitID;
+	CString	strFruitCnt;
 	switch (iType)
 	{
 	case SOC_GAMESTART:
 		m_bStartCnt = TRUE;
 		break;
 	case SOC_THROWNCARD:
+		CARD tCard;
+
+		strFruitID.Format("%c", (pTemp + 1)[0]);
+		strFruitCnt.Format("%c", (pTemp + 1)[1]);
+
+		tCard.iFruitID = atoi(strFruitID.GetString());
+		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
+
+		addOtherThrownCard(tCard);
+		ChangeCardImage(USER_OTHER, THROWN, tCard);
+		GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(TRUE);
 		break;
 	case SOC_BELL:
 		break;
@@ -457,5 +469,10 @@ void CHalliGalliServerDlg::OnStnClickedImgPlayerOwn()
 	addMyThrownCard(tCard);
 	m_lstMyCard.pop_back();
 	ChangeCardImage(USER_PLAYER, THROWN, tCard);
+
+	char pCardInfo[MID_STR] = "";
+	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
+	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(FALSE);
+	SendGame(SOC_THROWNCARD, pCardInfo);
 	
 }

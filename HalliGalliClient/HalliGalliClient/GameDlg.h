@@ -67,4 +67,16 @@ public:
 	CStatic m_strMe;
 	CString m_strSend;
 	afx_msg void OnClickedImgOtherOwn();
+	afx_msg void OnBnClickedButtonSub();
+
+public:
+	list<CARD> m_lstMyThrownCard;
+	list<CARD> m_lstOtherThrownCard;
+	list<CARD> m_lstMyCard;
+	BOOL m_bWin;
+
+	void addMyThrownCard(const CARD sCard);
+	void deleteAllMyThrownCard();
+	void addOtherThrownCard(const CARD sCard);
+	void deleteAllOtherThrownCard();
 };

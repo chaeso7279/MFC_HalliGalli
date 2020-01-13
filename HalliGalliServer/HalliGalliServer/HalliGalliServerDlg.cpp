@@ -108,6 +108,7 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 
 	/* 소켓 초기화 */
 	InitSocket();
+	InitCardDed();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -196,4 +197,70 @@ void CHalliGalliServerDlg::InitSocket()
 	m_socServer.Create(DEFAULT_PORT);
 	m_socServer.Listen();
 	m_socServer.Init(this->m_hWnd);
+}
+
+void CHalliGalliServerDlg::InitCardDed()
+{
+	// 1:체리 2:배 카드 덱 초기화
+	int nIndex = 0;
+	for (int i = 1; i <= 2; i++)
+	{
+		for (int j = 1; j <= 5; j++)
+		{
+			if (j == 1)
+			{
+				for (int k = 0; k < 5; k++)
+				{
+					m_cardDec[nIndex].iFruitID = i;
+					m_cardDec[nIndex].iFruitCnt = j;
+					nIndex++;
+				}
+			}
+			else if (j == 4)
+			{
+				for (int k = 0; k < 2; k++)
+				{
+					m_cardDec[nIndex].iFruitID = i;
+					m_cardDec[nIndex].iFruitCnt = j;
+					nIndex++;
+				}
+			}
+			else if (j == 5)
+			{
+				m_cardDec[nIndex].iFruitID = i;
+				m_cardDec[nIndex].iFruitCnt = j;
+				nIndex++;
+			}
+			else
+			{
+				for (int k = 0; k < 3; k++)
+				{
+					m_cardDec[nIndex].iFruitID = i;
+					m_cardDec[nIndex].iFruitCnt = j;
+					nIndex++;
+				}
+			}
+			
+		}
+	}
+
+	// 인덱스 셔플 
+	for (int i = 0; i < 28; i++)
+		m_shuffleCardIndex[i] = i;
+
+	int nRandomIndex1 = 0;
+	int nRandomIndex2 = 0;
+
+	srand((unsigned int)time(NULL));
+
+	for (int i = 0; i < 84; i++)
+	{
+		nRandomIndex1 = rand() % 28;
+		nRandomIndex2 = rand() % 28;
+
+		int nTemp = 0;
+		nTemp = m_shuffleCardIndex[nRandomIndex1];
+		m_shuffleCardIndex[nRandomIndex1] = m_shuffleCardIndex[nRandomIndex2];
+		m_shuffleCardIndex[nRandomIndex2] = nTemp;
+	}
 }

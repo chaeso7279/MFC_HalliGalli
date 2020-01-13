@@ -60,4 +60,13 @@ public:
 	CStatic m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
 
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
+
+public:
+	/* 카드 초기 셔플 */
+	CARD m_cardDec[28];
+	int  m_shuffleCardIndex[28];
+
+public:
+	void InitCardDed();
+
 };

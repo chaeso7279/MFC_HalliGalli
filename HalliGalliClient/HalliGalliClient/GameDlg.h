@@ -37,7 +37,6 @@ public:
 public:
 	/* 이미지 관련 함수 */
 	void InitPicCtrl();
-
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = {FRUIT_BACK, 1});
 	
 	afx_msg void OnClickedImgPlayerOwn();
@@ -67,17 +66,11 @@ public:
 	BOOL m_bConnect = FALSE;
 
 public:
-	CListBox m_list;
-
-public:
 	/* 이미지 관련 변수 */
 	CStatic m_BellPicCtrl; // 종 이미지 컨트롤
 	CStatic m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
 
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
-
-public:
-	CString m_strGain;
 	
 public:
 	/* 카드 관련 자료구조 */
@@ -95,8 +88,10 @@ public:
 	CStatic m_strCardCount;
 	CStatic m_strWholeCount;
 	CString m_strMe;
+	CString m_strGain;
 
 public:
 	/* 채팅 관련 변수 */
+	CListBox m_list;
 	CString m_strSend;
 };

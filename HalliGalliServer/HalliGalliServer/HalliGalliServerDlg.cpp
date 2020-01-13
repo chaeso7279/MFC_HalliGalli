@@ -11,6 +11,8 @@
 #define new DEBUG_NEW
 #endif
 
+int wcnt = 5;
+int ccnt = 5;
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -51,6 +53,10 @@ END_MESSAGE_MAP()
 
 CHalliGalliServerDlg::CHalliGalliServerDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_HALLIGALLISERVER_DIALOG, pParent)
+	, m_strGain(_T(""))
+	, m_strSend(_T(""))
+	, m_bWin{}
+	, m_strMe(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -65,6 +71,14 @@ void CHalliGalliServerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_IMG_OTHER_THROWN, m_CardPicCtrl[USER_OTHER][THROWN]);
 	DDX_Control(pDX, IDC_IMG_PLAYER_OWN, m_CardPicCtrl[USER_PLAYER][OWN]);
 	DDX_Control(pDX, IDC_IMG_PLAYER_THROWN, m_CardPicCtrl[USER_PLAYER][THROWN]);
+	DDX_Control(pDX, IDC_EDIT_CARDCOUNTNUM, m_strCardCountNum);
+	DDX_Control(pDX, IDC_EDIT_WHOLECOUNTNUM, m_strWholeCountNum);
+	DDX_Control(pDX, IDC_LIST1, m_list);
+	DDX_Control(pDX, IDC_STATIC_WHOLECOUNT, m_strWholeCount);
+	DDX_Control(pDX, IDC_STATIC_CARDCOUNT, m_strCardCount);
+	DDX_Text(pDX, IDC_STATIC_ME, m_strMe);
+	DDX_Text(pDX, IDC_STATIC_GAIN, m_strGain);
+	DDX_Text(pDX, IDC_EDIT_SEND, m_strSend);
 }
 
 BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
@@ -74,6 +88,7 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_MESSAGE(UM_ACCEPT, OnAccept)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnStnClickedImgPlayerOwn)
+	ON_BN_CLICKED(IDC_BUTTON_SEND, &CHalliGalliServerDlg::OnClickedButtonSend)
 END_MESSAGE_MAP()
 
 
@@ -191,6 +206,8 @@ LPARAM CHalliGalliServerDlg::OnAccept(UINT wParam, LPARAM lParam)
 	m_pSocCom = m_socServer.GetAcceptSocCom();
 	m_pSocCom->Init(this->m_hWnd);
 
+	GetDlgItem(IDC_BUTTON_SEND)->EnableWindow(TRUE);
+	UpdateData(FALSE);
 	//UpdateData(FALSE);
 
 	// 클라이언트 연결 후 게임 초기화
@@ -203,7 +220,7 @@ LPARAM CHalliGalliServerDlg::OnAccept(UINT wParam, LPARAM lParam)
 LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 {
 	char pTemp[MAX_STR];
-	CString strTemp;
+	CString strTemp, str;
 
 	memset(pTemp, '\0', MAX_STR);
 	m_pSocCom->Receive(pTemp, MAX_STR);
@@ -223,6 +240,8 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 	case SOC_TAKECARD:
 		break;
 	case SOC_TEXT:
+		str.Format("%s", pTemp + 1);
+		m_list.AddString("(상대방) : " + str);
 		break;
 	case SOC_GAMEEND:
 		break;
@@ -238,6 +257,17 @@ void CHalliGalliServerDlg::InitSocket()
 	m_socServer.Create(DEFAULT_PORT);
 	m_socServer.Listen();
 	m_socServer.Init(this->m_hWnd);
+}
+
+void CHalliGalliServerDlg::OnClickedButtonSend()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	UpdateData(TRUE);
+	SendGame(SOC_TEXT, m_strSend);
+
+	m_list.AddString("  (나) : " + m_strSend);
+	m_strSend = (_T(""));
+	UpdateData(FALSE);
 }
 
 void CHalliGalliServerDlg::SendGame(int iType, CString strTemp)
@@ -449,6 +479,8 @@ void CHalliGalliServerDlg::deleteAllOtherThrownCard()
 void CHalliGalliServerDlg::OnStnClickedImgPlayerOwn()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	SetDlgItemInt(IDC_EDIT_WHOLECOUNTNUM, wcnt);
+	SetDlgItemInt(IDC_EDIT_CARDCOUNTNUM, ccnt);
 	
 	CARD tCard;
 
@@ -458,4 +490,7 @@ void CHalliGalliServerDlg::OnStnClickedImgPlayerOwn()
 	m_lstMyCard.pop_back();
 	ChangeCardImage(USER_PLAYER, THROWN, tCard);
 	
+	wcnt--;
+	ccnt--;
 }
+

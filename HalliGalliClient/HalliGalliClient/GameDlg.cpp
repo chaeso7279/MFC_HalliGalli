@@ -89,7 +89,7 @@ BOOL CGameDlg::DestroyWindow()
 LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 {
 	char pTemp[MAX_STR];
-	CString strTemp;
+	CString strTemp, str;
 
 	memset(pTemp, '\0', MAX_STR);
 	m_pSocCom->Receive(pTemp, MAX_STR);
@@ -115,6 +115,8 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 	case SOC_TAKECARD:
 		break;
 	case SOC_TEXT:
+		str.Format("%s", pTemp + 1);
+		m_list.AddString("(상대방) : " + str);
 		break;
 	case SOC_GAMEEND:
 		break;
@@ -140,6 +142,7 @@ void CGameDlg::InitSocket(CSocCom * pSocCom)
 
 void CGameDlg::SendGame(int iType, CString strTemp)
 {
+	UpdateData(TRUE);
 	char pTemp[MAX_STR];
 
 	memset(pTemp, '\0', MAX_STR);
@@ -205,7 +208,7 @@ void CGameDlg::OnBnClickedButtonSend()
 	UpdateData(TRUE);
 	SendGame(SOC_TEXT, m_strSend);
 	
-	m_list.AddString(">>" + m_strSend);
+	m_list.AddString("  (나) : " + m_strSend);
 	m_strSend = (_T(""));
 	UpdateData(FALSE);
 }

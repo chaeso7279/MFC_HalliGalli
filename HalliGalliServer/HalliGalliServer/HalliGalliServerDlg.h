@@ -94,4 +94,13 @@ public:
 	void deleteAllMyThrownCard();
 	void addOtherThrownCard(const CARD sCard);
 	void deleteAllOtherThrownCard();
+	afx_msg void OnClickedButtonSend();
+	CEdit m_strCardCountNum;
+	CEdit m_strWholeCountNum;
+	CListBox m_list;
+	CStatic m_strWholeCount;
+	CStatic m_strCardCount;
+	CString m_strMe;
+	CString m_strGain;
+	CString m_strSend;
 };

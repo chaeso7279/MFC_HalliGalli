@@ -152,7 +152,7 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
 
 		m_lstMyCard.push_back(tCard);
-		
+		AfxMessageBox("상대방의 카드를 획득했습니다!");
 		break;
 	case SOC_TEXT:
 		str.Format("%s", pTemp + 1);
@@ -382,7 +382,7 @@ void CGameDlg::OnClickedImgBell()
 		tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
 
 		m_lstMyCard.pop_back();
-
+		AfxMessageBox("종을 잘못쳤내요. 카드 하나를 잃었습니다!");
 		/* 서버에 낸 카드 전달 */
 		char pCardInfo[MID_STR] = "";
 		sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);

@@ -8,6 +8,7 @@
 
 #include "ConnectDlg.h"
 #include "GameDlg.h"
+#include "Rule.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -74,6 +75,7 @@ BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO_4P, &CIntroDlg::OnBnClickedRadio4p)
 	ON_BN_CLICKED(IDC_BUTTON_CONNECT, &CIntroDlg::OnBnClickedButtonConnect)
 	ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
+	ON_BN_CLICKED(IDC_BUTTON_HELP, &CIntroDlg::OnClickedButtonHelp)
 END_MESSAGE_MAP()
 
 
@@ -119,6 +121,7 @@ BOOL CIntroDlg::OnInitDialog()
 	m_p60Timer = CTimer::Create();
 	m_pFrame = CFrame::Create(60.f);
 
+	
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -256,4 +259,17 @@ void CIntroDlg::GameDlgEnd()
 		delete m_pFrame;
 
 	SendMessage(WM_CLOSE);
+
+
+
+}
+
+
+void CIntroDlg::OnClickedButtonHelp()
+{
+	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+
+	m_rulerule = new CRule();
+	m_rulerule->Create(IDD_RULE,this);
+	m_rulerule->ShowWindow(SW_SHOW);
 }

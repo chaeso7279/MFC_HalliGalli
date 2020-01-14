@@ -79,6 +79,7 @@
     <ClInclude Include="Timer.h">
       <Filter>07. Timer</Filter>
     </ClInclude>
+    <ClInclude Include="Rule.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliClient.cpp">
@@ -111,6 +112,7 @@
     <ClCompile Include="Timer.cpp">
       <Filter>07. Timer</Filter>
     </ClCompile>
+    <ClCompile Include="Rule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HalliGalliClient.rc">
@@ -124,6 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\HalliGalliClient.ico">
+      <Filter>99. Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>99. Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Desktop\rulerule.bmp">
       <Filter>99. Default\리소스 파일</Filter>
     </Image>
   </ItemGroup>

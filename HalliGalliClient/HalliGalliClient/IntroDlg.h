@@ -6,7 +6,7 @@
 
 #include "Timer.h"
 #include "Frame.h"
-
+#include "Rule.h"
 // CIntroDlg 대화 상자
 class CIntroDlg : public CDialogEx
 {
@@ -15,6 +15,9 @@ class CIntroDlg : public CDialogEx
 // 생성입니다.
 public:
 	CIntroDlg(CWnd* pParent = NULL);	// 표준 생성자입니다.
+
+	CRule     *m_rulerule; //// 게임규칙////
+	
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -53,4 +56,7 @@ public:
 	CTimer* m_pImmediateTimer = nullptr;
 	CTimer* m_p60Timer = nullptr;
 	CFrame* m_pFrame = nullptr;
+
+public:
+	afx_msg void OnClickedButtonHelp();
 };

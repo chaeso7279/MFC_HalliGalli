@@ -22,7 +22,7 @@
     <ProjectGuid>{D8B9B2F3-439C-4325-808D-1B93E2C23A6E}</ProjectGuid>
     <RootNamespace>HalliGalliClient</RootNamespace>
     <Keyword>MFCProj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -194,6 +194,7 @@
     <ClInclude Include="Macro.h" />
     <ClInclude Include="PictureEx.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Rule.h" />
     <ClInclude Include="SocCom.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="ImageMgr.cpp" />
     <ClCompile Include="IntroDlg.cpp" />
     <ClCompile Include="PictureEx.cpp" />
+    <ClCompile Include="Rule.cpp" />
     <ClCompile Include="SocCom.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -224,6 +226,8 @@
     <None Include="res\HalliGalliClient.rc2" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\rulerule.bmp" />
+    <Image Include="res\bitmap1.bmp" />
     <Image Include="res\HalliGalliClient.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

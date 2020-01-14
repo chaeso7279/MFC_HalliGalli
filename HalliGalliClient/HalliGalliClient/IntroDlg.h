@@ -6,7 +6,7 @@
 
 #include "Timer.h"
 #include "Frame.h"
-
+#include "Rule.h"
 // CIntroDlg 대화 상자
 class CIntroDlg : public CDialogEx
 {
@@ -41,6 +41,7 @@ public:
 	afx_msg void OnBnClickedRadio4p();
 
 	afx_msg void OnBnClickedButtonConnect(); 
+	afx_msg void OnClickedButtonHelp();
 
 public:
 	void GameDlgEnd();

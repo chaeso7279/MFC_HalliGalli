@@ -111,5 +111,6 @@ extern float g_fDeltaTime;
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
 #include <iostream>
 #endif
+#include <afxcontrolbars.h>
 
 #pragma warning(disable : 4985)

@@ -57,6 +57,9 @@ public:
 
 	void ChangeMyTurn(BOOL bMyTurn);
 
+	void CheckWin(const int& iOtherCnt);
+	BOOL IsGameEnd(); // 게임이 끝났는지 검사하는 함수
+
 public:
 	/* 채팅 관련 함수 */
 	afx_msg void OnBnClickedButtonSend();
@@ -86,6 +89,9 @@ public:
 	BOOL m_bTakeCard = FALSE;
 	BOOL m_bMyTurn = FALSE;
 	BOOL m_bOtherBell = FALSE;
+
+	BOOL m_bWin = FALSE;
+	BOOL m_bGameEnd = FALSE;
 
 	CEdit m_strWholeCountNum;
 	CEdit m_strCardCountNum;

@@ -243,6 +243,11 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 	CString strFruitID;
 	CString	strFruitCnt;
 	
+	CString strOtherCardCnt;
+	CString strCardCnt;
+
+	int iOtherCardCnt = 0;
+
 	CARD tCard;
 
 	switch (iType)
@@ -280,7 +285,17 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		str.Format("%s", pTemp + 1);
 		m_list.AddString("(상대방) : " + str);
 		break;
+	case SOC_NOTURN:
+		strCardCnt.Format("%d", m_lstMyCard.size());
+		SendGame(SOC_NOTURN, strCardCnt);
+
+		strOtherCardCnt.Format("%s", pTemp + 1);
+		iOtherCardCnt = atoi(strOtherCardCnt.GetString());
+		
+		CheckWin(iOtherCardCnt);
+		break;
 	case SOC_GAMEEND:
+		m_bGameEnd = TRUE;
 		break;
 	}
 
@@ -563,18 +578,59 @@ void CHalliGalliServerDlg::ChangeMyTurn(BOOL bMyTurn)
 	UpdateData(FALSE);
 }
 
+void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
+{
+	if (iOtherCnt > m_lstMyCard.size()) // 상대의 카드가 나보다 많을 때
+	{
+		m_bWin = FALSE;
+		AfxMessageBox("패배했습니다");
+	}
+	else if (iOtherCnt < m_lstMyCard.size())
+	{
+		m_bWin = TRUE;
+		AfxMessageBox("승리했습니다");
+	}
+	else
+	{
+		m_bWin = FALSE;
+		AfxMessageBox("무승부입니다");
+	}
+
+	SendGame(SOC_GAMEEND);
+	m_bGameEnd = TRUE;
+}
+
 BOOL CHalliGalliServerDlg::IsGameEnd()
 {
 	/* 게임이 끝났는지 검사하는 함수 */
-	//if(m_lstMyCard.size() <= 0)
+	if (m_lstMyCard.size() <= 0) // 내가 가진 카드가 없을 때
+	{
+		m_bWin = FALSE;
+		SendGame(SOC_GAMEEND);
 
+		AfxMessageBox("패배했습니다");
 
-	return 0;
+		m_bGameEnd = TRUE;
+
+		return TRUE;
+	}
+
+	//if (m_iTurnCnt <= 0) // 전체 턴수가 없을 때 
+	//{
+	//	CString strCardCnt;
+	//	strCardCnt.Format("%d", m_lstMyCard.size());
+
+	//	SendGame(SOC_NOTURN, strCardCnt);
+
+	//	return TRUE;
+	//}
+
+	return FALSE;
 }
 
 void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 {
-	if (!m_bConnect || !m_bStartCnt || !m_bMyTurn)
+	if (!m_bConnect || !m_bStartCnt || !m_bMyTurn || m_bGameEnd)
 		return;
 
 	/* 카드 내기 */
@@ -596,6 +652,10 @@ void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 	SendGame(SOC_THROWNCARD, pCardInfo);
 
+	/* 게임 끝났는지 검사 */
+	if (IsGameEnd())
+		return;
+
 	/* 턴 변경 */
 	ChangeMyTurn(FALSE);
 
@@ -605,8 +665,10 @@ void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 
 void CHalliGalliServerDlg::OnClickedImgBell()
 {
-	/* 벨을 클릭 했을 경우 */
+	if (m_bGameEnd)
+		return;
 
+	/* 벨을 클릭 했을 경우 */
 	if (m_bOtherBell) // 이미 상대방이 벨을 먼저 눌렀으면 return
 		return;
 	

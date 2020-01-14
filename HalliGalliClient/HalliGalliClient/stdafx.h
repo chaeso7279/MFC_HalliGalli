@@ -75,6 +75,7 @@ using namespace std;
 #define SOC_BELL			5	// 전송 데이터: X
 #define SOC_TAKECARD		6	// 전송 데이터: X
 #define SOC_NOTAKECARD		7	// 전송 데이터: 패널티 카드 한장 전송
+#define SOC_NOTURN			8	// 전송 데이터: 내 카드 개수
 
 #define DEFAULT_PORT	5000
 #define DEFAULT_IP		"127.0.0.1"

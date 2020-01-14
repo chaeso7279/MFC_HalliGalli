@@ -7,6 +7,8 @@
 #include "HalliGalliServerDlg.h"
 #include "afxdialogex.h"
 
+#include "SoundMgr.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -142,6 +144,10 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 	m_p60Timer = CTimer::Create();
 	m_pFrame = CFrame::Create(60.f);
 
+	/* 사운드 로드 */
+	g_pSoundMgr = CSoundMgr::GetInstance();
+	g_pSoundMgr->Initialize();
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -199,6 +205,10 @@ BOOL CHalliGalliServerDlg::DestroyWindow()
 	/* 이미지 매니저 삭제 */
 	CImageMgr::DestroyInstance();
 	m_pImgMgr = nullptr;
+
+	/* 사운드 매니저 삭제 */
+	g_pSoundMgr->DestroyInstance();
+	g_pSoundMgr = nullptr;
 
 	/* 타이머 삭제 */
 	if (m_pImmediateTimer)
@@ -274,10 +284,12 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		m_iTurnCnt--;
 		m_strWholeCountNum.Format("%d", m_iTurnCnt);
 		UpdateData(FALSE);
+		g_pSoundMgr->PlaySound("Card", CSoundMgr::CH_CARD);
 		break;
 	case SOC_BELL:
 		/* 상대가 벨을 눌렀을 경우 */
 		m_bOtherBell = TRUE;
+		g_pSoundMgr->PlaySound("Bell", CSoundMgr::CH_BELL);
 		break;
 	case SOC_TAKECARD:
 		/* 상대가 카드를 가져갔을 경우 */
@@ -317,10 +329,12 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		{
 		case GAME_WIN:
 			/* 상대가 이김 */
+			g_pSoundMgr->PlaySound("Lose", CSoundMgr::CH_ETC);
 			AfxMessageBox("패배했습니다");
 			break;
 		case GAME_LOSE:
 			/* 상대가 짐 */
+			g_pSoundMgr->PlaySound("Win", CSoundMgr::CH_ETC);
 			AfxMessageBox("승리했습니다");
 			break;
 		case GAME_DRAW:
@@ -328,6 +342,10 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 			AfxMessageBox("무승부입니다");
 			break;
 		}
+
+		m_strMe = "게임이 종료됐습니다";
+		UpdateData(FALSE);
+
 		m_bGameEnd = TRUE;
 		break;
 	}
@@ -348,6 +366,8 @@ LRESULT CHalliGalliServerDlg::OnKickIdle(WPARAM wParam, LPARAM lParam)
 			m_p60Timer->Update();
 			float fTime60 = m_p60Timer->Get_DeltaTime();
 			g_fDeltaTime = fTime60;
+
+			g_pSoundMgr->UpdateSound();
 		}
 
 	}
@@ -681,6 +701,7 @@ void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
 		m_bWin = FALSE;
 		strEvent.Format("%d", GAME_LOSE);
 		SendGame(SOC_GAMEEND, strEvent);
+		g_pSoundMgr->PlaySound("Lose", CSoundMgr::CH_ETC);
 		AfxMessageBox("패배했습니다");
 	}
 	else if (iOtherCnt < int(m_lstMyCard.size()))
@@ -688,6 +709,7 @@ void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
 		m_bWin = TRUE;
 		strEvent.Format("%d", GAME_WIN);
 		SendGame(SOC_GAMEEND, strEvent);
+		g_pSoundMgr->PlaySound("Win", CSoundMgr::CH_ETC);
 		AfxMessageBox("승리했습니다");
 	}
 	else
@@ -698,6 +720,9 @@ void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
 		AfxMessageBox("무승부입니다");
 	}
 
+	m_strMe = "게임이 종료됐습니다";
+	UpdateData(FALSE);
+
 	m_bGameEnd = TRUE;
 }
 
@@ -707,13 +732,18 @@ BOOL CHalliGalliServerDlg::IsGameEnd()
 	if (m_lstMyCard.size() <= 0) // 내가 가진 카드가 없을 때
 	{
 		m_bWin = FALSE;
-		AfxMessageBox("패배했습니다");
-
+	
 		CString strEvent;
 		strEvent.Format("%d", GAME_LOSE);
 		SendGame(SOC_GAMEEND, strEvent);
 
 		m_bGameEnd = TRUE;
+
+		m_strMe = "게임이 종료됐습니다";
+		UpdateData(FALSE);
+
+		g_pSoundMgr->PlaySound("Lose", CSoundMgr::CH_ETC);
+		AfxMessageBox("패배했습니다");
 
 		return TRUE;
 	}
@@ -758,7 +788,7 @@ void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 	m_strWholeCountNum.Format("%d", m_iTurnCnt);
 	
 	UpdateData(FALSE);
-
+	g_pSoundMgr->PlaySound("Card", CSoundMgr::CH_CARD);
 
 	/* 게임 끝났는지 검사 */
 	if (IsGameEnd())
@@ -781,6 +811,8 @@ void CHalliGalliServerDlg::OnClickedImgBell()
 	
 	SendGame(SOC_BELL);
 	CheckThrownCard(); // 카드 검사
+
+	g_pSoundMgr->PlaySound("Bell", CSoundMgr::CH_BELL);
 
 	if (m_bTakeCard)
 	{

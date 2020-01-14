@@ -11,6 +11,7 @@
 #endif
 
 float g_fDeltaTime = 0.f;
+CSoundMgr* g_pSoundMgr = nullptr;
 // CHalliGalliServerApp
 
 BEGIN_MESSAGE_MAP(CHalliGalliServerApp, CWinApp)

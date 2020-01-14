@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 
 #include "IntroDlg.h"
-
+#include "SoundMgr.h"
 
 // CGameDlg 대화 상자입니다.
 
@@ -119,11 +119,12 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		m_iTurnCnt--;
 		m_strWholeCountNum.Format("%d", m_iTurnCnt);
 		UpdateData(FALSE);
-
+		g_pSoundMgr->PlaySound("Card", CSoundMgr::CH_CARD);
 		break;
 	case SOC_BELL:
 		/* 상대가 벨을 눌렀을 경우 */
 		m_bOtherBell = TRUE;
+		g_pSoundMgr->PlaySound("Bell", CSoundMgr::CH_BELL);
 		break;
 	case SOC_TAKECARD:
 		/* 상대가 카드를 가져갔을 경우 */
@@ -163,10 +164,12 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		{
 		case GAME_WIN:
 			/* 상대가 이김 */
+			g_pSoundMgr->PlaySound("Lose", CSoundMgr::CH_ETC);
 			AfxMessageBox("패배했습니다");
 			break;
 		case GAME_LOSE:
 			/* 상대가 짐 */
+			g_pSoundMgr->PlaySound("Win", CSoundMgr::CH_ETC);
 			AfxMessageBox("승리했습니다");
 			break;
 		case GAME_DRAW:
@@ -174,6 +177,9 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 			AfxMessageBox("무승부입니다");
 			break;
 		}
+		m_strMe = "게임이 종료됐습니다";
+		UpdateData(FALSE);
+
 		m_bGameEnd = TRUE;
 		break;
 	}
@@ -279,6 +285,7 @@ void CGameDlg::OnClickedImgPlayerOwn()
 	m_strWholeCountNum.Format("%d", m_iTurnCnt);
 
 	UpdateData(FALSE);
+	g_pSoundMgr->PlaySound("Card", CSoundMgr::CH_CARD);
 
 	/* 게임 끝났는지 검사 */
 	if (IsGameEnd())
@@ -415,6 +422,7 @@ void CGameDlg::CheckWin(const int & iOtherCnt)
 		m_bWin = FALSE;
 		strEvent.Format("%d", GAME_LOSE);
 		SendGame(SOC_GAMEEND, strEvent);
+		g_pSoundMgr->PlaySound("Lose", CSoundMgr::CH_ETC);
 		AfxMessageBox("패배했습니다");
 	}
 	else if (iOtherCnt < int(m_lstMyCard.size()))
@@ -422,6 +430,7 @@ void CGameDlg::CheckWin(const int & iOtherCnt)
 		m_bWin = TRUE;
 		strEvent.Format("%d", GAME_WIN);
 		SendGame(SOC_GAMEEND, strEvent);
+		g_pSoundMgr->PlaySound("Win", CSoundMgr::CH_ETC);
 		AfxMessageBox("승리했습니다");
 	}
 	else
@@ -432,6 +441,9 @@ void CGameDlg::CheckWin(const int & iOtherCnt)
 		AfxMessageBox("무승부입니다");
 	}
 
+	m_strMe = "게임이 종료됐습니다";
+	UpdateData(FALSE);
+
 	m_bGameEnd = TRUE;
 }
 
@@ -441,13 +453,18 @@ BOOL CGameDlg::IsGameEnd()
 	if (m_lstMyCard.size() <= 0) // 내가 가진 카드가 없을 때
 	{
 		m_bWin = FALSE;
-		AfxMessageBox("패배했습니다");
 
 		CString strEvent;
 		strEvent.Format("%d", GAME_LOSE);
 		SendGame(SOC_GAMEEND, strEvent);
 
 		m_bGameEnd = TRUE;
+
+		m_strMe = "게임이 종료됐습니다";
+		UpdateData(FALSE);
+
+		g_pSoundMgr->PlaySound("Lose", CSoundMgr::CH_ETC);
+		AfxMessageBox("패배했습니다");
 
 		return TRUE;
 	}
@@ -476,6 +493,8 @@ void CGameDlg::OnClickedImgBell()
 
 	SendGame(SOC_BELL);
 	CheckThrownCard(); // 카드 검사
+
+	g_pSoundMgr->PlaySound("Bell", CSoundMgr::CH_BELL);
 
 	if (m_bTakeCard)
 	{

@@ -11,6 +11,7 @@
 #endif
 
 CIntroDlg* g_pIntroDlg = nullptr;
+CSoundMgr* g_pSoundMgr = nullptr;
 float g_fDeltaTime = 0.f;
 
 BEGIN_MESSAGE_MAP(CHalliGalliClientApp, CWinApp)

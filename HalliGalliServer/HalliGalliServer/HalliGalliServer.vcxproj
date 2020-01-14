@@ -196,6 +196,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SocCom.h" />
     <ClInclude Include="SocSvr.h" />
+    <ClInclude Include="SoundMgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="PictureEx.cpp" />
     <ClCompile Include="SocCom.cpp" />
     <ClCompile Include="SocSvr.cpp" />
+    <ClCompile Include="SoundMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

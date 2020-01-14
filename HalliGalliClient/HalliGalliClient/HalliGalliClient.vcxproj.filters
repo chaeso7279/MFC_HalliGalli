@@ -38,6 +38,9 @@
     <Filter Include="08. RuleDlg">
       <UniqueIdentifier>{040fc15f-5e20-4c8f-8ebf-99437c61784e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="09. SoundManager">
+      <UniqueIdentifier>{1a26b677-b63c-4be4-b749-4785c100e632}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliClient.h">
@@ -85,6 +88,9 @@
     <ClInclude Include="Rule.h">
       <Filter>08. RuleDlg</Filter>
     </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>09. SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliClient.cpp">
@@ -119,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="Rule.cpp">
       <Filter>08. RuleDlg</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>09. SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,8 @@
 #include "GameDlg.h"
 #include "Rule.h"
 
+#include "SoundMgr.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -129,6 +131,11 @@ BOOL CIntroDlg::OnInitDialog()
 	if (pImage)
 		m_LogoPicCtrl.SetBitmap(*pImage);
 
+	/* 사운드 로드 */
+	g_pSoundMgr = CSoundMgr::GetInstance();
+	if (FAILED(g_pSoundMgr->Initialize()))
+		AfxMessageBox("사운드 로드 실패");
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 
@@ -200,6 +207,8 @@ LRESULT CIntroDlg::OnKickIdle(WPARAM wParam, LPARAM lParam)
 			m_p60Timer->Update();
 			float fTime60 = m_p60Timer->Get_DeltaTime();
 			g_fDeltaTime = fTime60;
+
+			g_pSoundMgr->UpdateSound();
 		}
 
 	}
@@ -265,10 +274,11 @@ void CIntroDlg::GameDlgEnd()
 	if (m_pFrame)
 		delete m_pFrame;
 
+	/* 사운드 매니저 삭제 */
+	g_pSoundMgr->DestroyInstance();
+	g_pSoundMgr = nullptr;
+
 	SendMessage(WM_CLOSE);
-
-
-
 }
 
 void CIntroDlg::OnClickedButtonHelp()

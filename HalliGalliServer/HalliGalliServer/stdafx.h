@@ -73,6 +73,13 @@ using namespace std;
 #define DEFAULT_PORT	5000
 #define DEFAULT_IP		"127.0.0.1"
 
+/* 사운드*/
+#include "fmod.h"
+#pragma comment(lib, "fmodex_vc.lib")
+
+class CSoundMgr;
+extern CSoundMgr* g_pSoundMgr;
+
 /* 기타 */
 #include <afxpriv.h>
 
@@ -94,11 +101,5 @@ using namespace std;
 #define MAX_STR		256
 	
 extern float g_fDeltaTime;
-
-#ifdef _CONSOLE
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-#include <iostream>
-#endif
-
 
 #pragma warning(disable : 4985)

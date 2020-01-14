@@ -35,6 +35,9 @@
     <Filter Include="05. Timer">
       <UniqueIdentifier>{44ce49e4-d42c-4c7d-8d26-e254591b3916}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06. SoundManager">
+      <UniqueIdentifier>{5cf2442a-b56c-41bf-ab77-0831ecde34ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliServer.h">
@@ -76,6 +79,9 @@
     <ClInclude Include="Timer.h">
       <Filter>05. Timer</Filter>
     </ClInclude>
+    <ClInclude Include="SoundMgr.h">
+      <Filter>06. SoundManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliServer.cpp">
@@ -104,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>05. Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundMgr.cpp">
+      <Filter>06. SoundManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

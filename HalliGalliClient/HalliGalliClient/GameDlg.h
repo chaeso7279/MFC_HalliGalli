@@ -22,7 +22,22 @@ public:
 #endif
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
+	virtual void DoDataExchange(CDataExchange* pDX)
+	{
+		CDialogEx::DoDataExchange(pDX);
+		DDX_Text(pDX, IDC_EDIT_SEND, m_strSend);
+		DDX_Text(pDX, IDC_STATIC_ME, m_strMe);
+		DDX_Control(pDX, IDC_LIST1, m_list);
+		DDX_Control(pDX, IDC_IMG_BELL, m_BellPicCtrl);
+		DDX_Control(pDX, IDC_IMG_OTHER_OWN, m_CardPicCtrl[USER_OTHER][OWN]);
+		DDX_Control(pDX, IDC_IMG_OTHER_THROWN, m_CardPicCtrl[USER_OTHER][THROWN]);
+		DDX_Control(pDX, IDC_IMG_PLAYER_OWN, m_CardPicCtrl[USER_PLAYER][OWN]);
+		DDX_Control(pDX, IDC_IMG_PLAYER_THROWN, m_CardPicCtrl[USER_PLAYER][THROWN]);
+		DDX_Control(pDX, IDC_STATIC_CARDCOUNT, m_strCardCount);
+		DDX_Control(pDX, IDC_STATIC_WHOLECOUNT, m_strWholeCount);
+		DDX_Text(pDX, IDC_WHOLECOUNTNUM, m_strWholeCountNum);
+		DDX_Text(pDX, IDC_CARDCOUNTNUM, m_strCardCountNum);
+	}    // DDX/DDV 지원입니다.
 	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
@@ -77,9 +92,10 @@ public:
 	
 public:
 	/* 카드 관련 자료구조 */
-	list<CARD> m_lstMyCard;
+	list<CARD> m_lstMyCard;			// 14
 	list<CARD> m_lstMyThrownCard;
 	list<CARD> m_lstOtherThrownCard;
+	int m_lstWholeCard;		// 50
 
 public:
 	/* 게임 진행관련 변수 */
@@ -88,12 +104,11 @@ public:
 	BOOL m_bMyTurn = FALSE;
 	BOOL m_bOtherBell = FALSE;
 
-	CEdit m_strWholeCountNum;
-	CEdit m_strCardCountNum;
+	CString m_strCardCountNum;
+	CString m_strWholeCountNum;
 	CStatic m_strCardCount;
 	CStatic m_strWholeCount;
 	CString m_strMe;
-	CString m_strGain;
 
 public:
 	/* 채팅 관련 변수 */

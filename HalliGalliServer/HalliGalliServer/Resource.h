@@ -9,14 +9,13 @@
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128
 #define IDC_IMG_BELL                    1001
-#define IDC_EDIT_WHOLECOUNTNUM          1002
-#define IDC_EDIT_CARDCOUNTNUM           1003
+#define IDC_WHOLECOUNTNUM               1002
+#define IDC_CARDCOUNTNUM                1003
 #define IDC_BUTTON_SUB                  1005
 #define IDC_BUTTON_SEND                 1006
 #define IDC_EDIT_SEND                   1007
 #define IDC_LIST1                       1008
 #define IDC_STATIC_ME                   1009
-#define IDC_STATIC_GAIN                 1010
 #define IDC_STATIC_HG                   1011
 #define IDC_STATIC_CARDCOUNT            1012
 #define IDC_STATIC_WHOLECOUNT           1013
@@ -31,7 +30,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

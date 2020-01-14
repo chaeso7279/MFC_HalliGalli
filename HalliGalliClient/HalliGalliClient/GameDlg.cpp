@@ -8,8 +8,6 @@
 
 #include "IntroDlg.h"
 
-int wcnt = 5;
-int ccnt = 5;
 
 // CGameDlg 대화 상자입니다.
 
@@ -17,39 +15,17 @@ IMPLEMENT_DYNAMIC(CGameDlg, CDialogEx)
 
 CGameDlg::CGameDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_GAME_DLG, pParent)
-	//, m_strWholeCount(_T(""))
-	//, m_strCardCount(_T(""))
-	//, m_strWholeCountNum(_T(""))
-	//, m_strCardCountNum(_T(""))
-	, m_strGain(_T(""))
 	, m_strSend(_T(""))
 	, m_bTakeCard{}
 	, m_strMe(_T("상대방의 차례입니다"))
+	, m_strWholeCountNum(_T(""))
+	, m_strCardCountNum(_T(""))
 {
 }
 
 CGameDlg::~CGameDlg()
 {
 }
-
-void CGameDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialogEx::DoDataExchange(pDX);
-	DDX_Text(pDX, IDC_STATIC_GAIN, m_strGain);
-	DDX_Text(pDX, IDC_EDIT_SEND, m_strSend);
-	DDX_Text(pDX, IDC_STATIC_ME, m_strMe);
-	DDX_Control(pDX, IDC_LIST1, m_list);
-	DDX_Control(pDX, IDC_IMG_BELL, m_BellPicCtrl);
-	DDX_Control(pDX, IDC_IMG_OTHER_OWN, m_CardPicCtrl[USER_OTHER][OWN]);
-	DDX_Control(pDX, IDC_IMG_OTHER_THROWN, m_CardPicCtrl[USER_OTHER][THROWN]);
-	DDX_Control(pDX, IDC_IMG_PLAYER_OWN, m_CardPicCtrl[USER_PLAYER][OWN]);
-	DDX_Control(pDX, IDC_IMG_PLAYER_THROWN, m_CardPicCtrl[USER_PLAYER][THROWN]);
-	DDX_Control(pDX, IDC_STATIC_CARDCOUNT, m_strCardCount);
-	DDX_Control(pDX, IDC_STATIC_WHOLECOUNT, m_strWholeCount);
-	DDX_Control(pDX, IDC_EDIT_WHOLECOUNTNUM, m_strWholeCountNum);
-	DDX_Control(pDX, IDC_EDIT_CARDCOUNTNUM, m_strCardCountNum);
-}
-
 
 BEGIN_MESSAGE_MAP(CGameDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CGameDlg::OnClickedImgPlayerOwn)
@@ -112,6 +88,8 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 	int iOtherCardCnt = 0;
 
+	m_strWholeCountNum.Format("%d", m_iTurnCnt);
+
 	switch (iType)
 	{
 	case SOC_INITGAME:
@@ -123,6 +101,7 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		}	
 		break;
 	case SOC_GAMESTART:
+		m_iTurnCnt = TURN_CNT;
 		m_bStartSvr = TRUE;
 		break;
 	case SOC_THROWNCARD:	
@@ -135,6 +114,8 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		AddOtherThrownCard(tCard);
 		ChangeCardImage(USER_OTHER, THROWN, tCard);
 		ChangeMyTurn(TRUE);
+		m_iTurnCnt--;
+		m_strWholeCountNum.Format("%d", m_iTurnCnt);
 		break;
 	case SOC_BELL:
 		/* 상대가 벨을 눌렀을 경우 */
@@ -176,6 +157,8 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		m_bGameEnd = TRUE;
 		break;
 	}
+
+	UpdateData(FALSE);
 
 	return TRUE;
 }
@@ -239,8 +222,10 @@ void CGameDlg::OnClickedImgPlayerOwn()
 		return;
 
 	/* 카드 내기 */
-	SetDlgItemInt(IDC_EDIT_WHOLECOUNTNUM, wcnt);
-	SetDlgItemInt(IDC_EDIT_CARDCOUNTNUM, ccnt);
+
+	m_strCardCountNum.Format("%d", m_lstMyCard.size());
+	m_iTurnCnt--;
+	UpdateData(FALSE);
 
 	CARD tCard;
 
@@ -264,8 +249,7 @@ void CGameDlg::OnClickedImgPlayerOwn()
 	/* 턴 변경 */
 	ChangeMyTurn(FALSE);
 
-	wcnt--;
-	ccnt--;
+
 }
 
 void CGameDlg::OnBnClickedButtonSend()
@@ -274,7 +258,7 @@ void CGameDlg::OnBnClickedButtonSend()
 	UpdateData(TRUE);
 	SendGame(SOC_TEXT, m_strSend);
 	
-	m_list.AddString("  (나) : " + m_strSend);
+	m_list.AddString("   (나) : " + m_strSend);
 	m_strSend = (_T(""));
 	UpdateData(FALSE);
 }
@@ -410,15 +394,15 @@ BOOL CGameDlg::IsGameEnd()
 		return TRUE;
 	}
 
-	//if (m_iTurnCnt <= 0) // 전체 턴수가 없을 때 
-	//{
-	//	CString strCardCnt;
-	//	strCardCnt.Format("%d", m_lstMyCard.size());
+	if (m_iTurnCnt <= 0) // 전체 턴수가 없을 때 
+	{
+		CString strCardCnt;
+		strCardCnt.Format("%d", m_lstMyCard.size());
 
-	//	SendGame(SOC_NOTURN, strCardCnt);
+		SendGame(SOC_NOTURN, strCardCnt);
 
-	//	return TRUE;
-	//}
+		return TRUE;
+	}
 
 	return FALSE;
 }
@@ -510,4 +494,6 @@ void CGameDlg::TakeThrownCard()
 {
 	DeleteAllMyThrownCard();
 	DeleteAllOtherThrownCard();
+	m_strCardCountNum.Format("%d", m_lstMyCard.size());
+	UpdateData(FALSE);
 }

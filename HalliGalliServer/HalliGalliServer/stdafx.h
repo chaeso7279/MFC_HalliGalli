@@ -84,6 +84,8 @@ using namespace std;
 #define CARD_CNT 28
 #define CARD_HALF_CNT 14
 
+#define TURN_CNT	50
+
 #define MID_STR		128
 #define MAX_STR		256
 	

@@ -102,10 +102,10 @@ public:
 	int  m_shuffleCardIndex[CARD_CNT];
 
 	/* 카드 관련 자료구조 */
-	list<CARD> m_lstMyCard;
+	list<CARD> m_lstMyCard;			// 14
 	list<CARD> m_lstMyThrownCard;
 	list<CARD> m_lstOtherThrownCard;
-
+	
 public:
 	/* 게임 진행관련 변수 */
 	BOOL m_bStartCnt = FALSE;
@@ -115,14 +115,15 @@ public:
 	
 	BOOL m_bWin = FALSE;
 	BOOL m_bGameEnd = FALSE;
+	
+	int m_iTurnCnt = TURN_CNT;		// 전체 턴수
 
-	CEdit m_strCardCountNum;
-	CEdit m_strWholeCountNum;
+	CString m_strWholeCountNum;
+	CString m_strCardCountNum;
 	
 	CStatic m_strWholeCount;
 	CStatic m_strCardCount;
 	CString m_strMe;
-	CString m_strGain;
 
 public:
 	/* 채팅 관련 변수 */

@@ -19,7 +19,7 @@ CGameDlg::CGameDlg(CWnd* pParent /*=NULL*/)
 	, m_bTakeCard{}
 	, m_strMe(_T("상대방의 차례입니다"))
 	, m_strWholeCountNum(_T(""))
-	, m_strCardCountNum(_T(""))
+	, m_strCardCountNum(_T("0"))
 {
 }
 
@@ -154,6 +154,7 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		CheckWin(iOtherCardCnt);
 		break;
 	case SOC_GAMEEND:
+		AfxMessageBox("승리했습니다!!");
 		m_bGameEnd = TRUE;
 		break;
 	}
@@ -221,12 +222,6 @@ void CGameDlg::OnClickedImgPlayerOwn()
 	if (!m_bConnect || !m_bStartSvr || !m_bMyTurn || m_bGameEnd)
 		return;
 
-	/* 카드 내기 */
-
-	m_strCardCountNum.Format("%d", m_lstMyCard.size());
-	m_iTurnCnt--;
-	UpdateData(FALSE);
-
 	CARD tCard;
 
 	tCard.iFruitID = m_lstMyCard.back().iFruitID;
@@ -242,14 +237,19 @@ void CGameDlg::OnClickedImgPlayerOwn()
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 	SendGame(SOC_THROWNCARD, pCardInfo);
 
+	/* 카드 잔여수 및 턴수 변경 */
+	m_strCardCountNum.Format("%d", m_lstMyCard.size());
+	m_iTurnCnt--;
+	m_strWholeCountNum.Format("%d", m_iTurnCnt);
+
+	UpdateData(FALSE);
+
 	/* 게임 끝났는지 검사 */
 	if (IsGameEnd())
 		return;
 
 	/* 턴 변경 */
 	ChangeMyTurn(FALSE);
-
-
 }
 
 void CGameDlg::OnBnClickedButtonSend()
@@ -283,7 +283,12 @@ BOOL CGameDlg::ReceiveCard(const char* pCardInfo)
 
 	/* 카드 개수가 14이면 TRUE, 아니면 FALSE 리턴 */
 	if (m_lstMyCard.size() == CARD_HALF_CNT)
+	{
+		m_strCardCountNum.Format("%d", m_lstMyCard.size());
+		UpdateData(FALSE);
+
 		return TRUE;
+	}
 	else
 		return FALSE;
 }
@@ -375,7 +380,6 @@ void CGameDlg::CheckWin(const int & iOtherCnt)
 		AfxMessageBox("무승부입니다");
 	}
 
-	SendGame(SOC_GAMEEND);
 	m_bGameEnd = TRUE;
 }
 

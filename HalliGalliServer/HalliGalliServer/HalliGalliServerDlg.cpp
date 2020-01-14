@@ -55,7 +55,7 @@ CHalliGalliServerDlg::CHalliGalliServerDlg(CWnd* pParent /*=NULL*/)
 	, m_bTakeCard{}
 	, m_strMe(_T("클라이언트 접속 대기중"))
 	, m_strWholeCountNum(_T(""))
-	, m_strCardCountNum(_T(""))
+	, m_strCardCountNum(_T("0"))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -306,6 +306,7 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		CheckWin(iOtherCardCnt);
 		break;
 	case SOC_GAMEEND:
+		AfxMessageBox("승리했습니다!!");
 		m_bGameEnd = TRUE;
 		break;
 	}
@@ -497,6 +498,9 @@ void CHalliGalliServerDlg::SendCardToClient()
 
 	/* 카드를 다 보내고 나면 GAMESTART 메시지를 클라에 보냄 */
 	SendGame(SOC_GAMESTART);
+
+	m_strCardCountNum.Format("%d", m_lstMyCard.size());
+	UpdateData(FALSE);
 }
 
 void CHalliGalliServerDlg::CheckThrownCard()
@@ -639,7 +643,6 @@ void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
 		AfxMessageBox("무승부입니다");
 	}
 
-	SendGame(SOC_GAMEEND);
 	m_bGameEnd = TRUE;
 }
 
@@ -677,10 +680,6 @@ void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 		return;
 
 	/* 카드 내기 */
-	m_strCardCountNum.Format("%d", m_lstMyCard.size());
-	m_iTurnCnt--;
-	UpdateData(FALSE);
-
 	CARD tCard;
 
 	tCard.iFruitID = m_lstMyCard.back().iFruitID;
@@ -695,6 +694,14 @@ void CHalliGalliServerDlg::OnClickedImgPlayerOwn()
 	char pCardInfo[MID_STR] = "";
 	sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 	SendGame(SOC_THROWNCARD, pCardInfo);
+	
+	/* 카드 잔여수 및 턴수 변경 */
+	m_strCardCountNum.Format("%d", m_lstMyCard.size());
+	m_iTurnCnt--;
+	m_strWholeCountNum.Format("%d", m_iTurnCnt);
+	
+	UpdateData(FALSE);
+
 
 	/* 게임 끝났는지 검사 */
 	if (IsGameEnd())

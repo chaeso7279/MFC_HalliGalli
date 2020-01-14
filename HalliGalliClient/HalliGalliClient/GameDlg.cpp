@@ -138,6 +138,7 @@ LPARAM CGameDlg::OnReceive(UINT wParam, LPARAM lParam)
 		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
 
 		m_lstMyCard.push_back(tCard);
+		m_strCardCountNum.Format("%d", m_lstMyCard.size());
 		AfxMessageBox("상대방의 카드를 획득했습니다!");
 		break;
 	case SOC_TEXT:
@@ -448,6 +449,9 @@ void CGameDlg::OnClickedImgBell()
 		char pCardInfo[MID_STR] = "";
 		sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
 		SendGame(SOC_NOTAKECARD,pCardInfo); // 상대에게 벨을 잘못 때렸음을 알림
+
+		m_strCardCountNum.Format("%d", m_lstMyCard.size());
+		UpdateData(FALSE);
 	}
 }
 

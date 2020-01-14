@@ -3,7 +3,6 @@
 
 #include "PictureEx.h"
 // CGameDlg 대화 상자입니다.
-
 class CGameDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CGameDlg)

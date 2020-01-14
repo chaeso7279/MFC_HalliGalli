@@ -10,7 +10,7 @@
 #define new DEBUG_NEW
 #endif
 
-
+float g_fDeltaTime = 0.f;
 // CHalliGalliServerApp
 
 BEGIN_MESSAGE_MAP(CHalliGalliServerApp, CWinApp)
@@ -110,3 +110,9 @@ BOOL CHalliGalliServerApp::InitInstance()
 	return FALSE;
 }
 
+BOOL CHalliGalliServerApp::OnIdle(LONG lCount)
+{
+	// TODO: 여기에 특수화된 코드를 추가 및/또는 기본 클래스를 호출합니다.
+
+	return CWinApp::OnIdle(lCount);
+}

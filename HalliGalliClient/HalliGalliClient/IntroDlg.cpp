@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_RADIO_2P, &CIntroDlg::OnBnClickedRadio2p)
 	ON_BN_CLICKED(IDC_RADIO_4P, &CIntroDlg::OnBnClickedRadio4p)
 	ON_BN_CLICKED(IDC_BUTTON_CONNECT, &CIntroDlg::OnBnClickedButtonConnect)
+	ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
 END_MESSAGE_MAP()
 
 
@@ -112,6 +113,11 @@ BOOL CIntroDlg::OnInitDialog()
 	   둘 다 동시에 체크될 수 없음					*/
 	m_Radio[RADIO_2P].SetCheck(TRUE);
 	m_Radio[RADIO_4P].SetCheck(FALSE);
+
+	/* 타이머 및 프레임 생성 */
+	m_pImmediateTimer = CTimer::Create();
+	m_p60Timer = CTimer::Create();
+	m_pFrame = CFrame::Create(60.f);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -171,6 +177,26 @@ BOOL CAboutDlg::DestroyWindow()
 	return CDialogEx::DestroyWindow();
 }
 
+LRESULT CIntroDlg::OnKickIdle(WPARAM wParam, LPARAM lParam)
+{
+	if (m_pImmediateTimer && m_p60Timer && m_pFrame)
+	{
+		m_pImmediateTimer->Update();
+
+		float fDeltaTime = m_pImmediateTimer->Get_DeltaTime();
+
+		if (m_pFrame->Is_PermitCall(fDeltaTime))
+		{
+			m_p60Timer->Update();
+			float fTime60 = m_p60Timer->Get_DeltaTime();
+			g_fDeltaTime = fTime60;
+		}
+
+	}
+
+	return (LRESULT)1;
+}
+
 void CIntroDlg::OnBnClickedRadio2p()
 {
 	/* 2인용 체크 시 들어오는 함수 */
@@ -221,5 +247,13 @@ void CIntroDlg::OnBnClickedButtonConnect()
 
 void CIntroDlg::GameDlgEnd()
 {
+	/* 타이머 삭제 */
+	if (m_pImmediateTimer)
+		delete m_pImmediateTimer;
+	if (m_p60Timer)
+		delete m_p60Timer;
+	if (m_pFrame)
+		delete m_pFrame;
+
 	SendMessage(WM_CLOSE);
 }

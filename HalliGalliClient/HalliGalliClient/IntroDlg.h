@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include "Timer.h"
+#include "Frame.h"
+
 // CIntroDlg 대화 상자
 class CIntroDlg : public CDialogEx
 {
@@ -31,6 +34,7 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+	afx_msg LPARAM OnKickIdle(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedRadio2p();
@@ -43,4 +47,10 @@ public:
 
 public:
 	CButton m_Radio[RADIO_END];
+
+public:
+	/* 타이머 관련 변수 */
+	CTimer* m_pImmediateTimer = nullptr;
+	CTimer* m_p60Timer = nullptr;
+	CFrame* m_pFrame = nullptr;
 };

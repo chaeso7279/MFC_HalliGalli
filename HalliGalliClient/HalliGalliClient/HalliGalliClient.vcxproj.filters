@@ -32,6 +32,9 @@
     <Filter Include="06. PictureEX">
       <UniqueIdentifier>{a2a43cab-f1c5-41c1-93eb-37625104ca4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="07. Timer">
+      <UniqueIdentifier>{d2645206-ef38-4001-9d98-10b682508644}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HalliGalliClient.h">
@@ -70,6 +73,12 @@
     <ClInclude Include="PictureEx.h">
       <Filter>06. PictureEX</Filter>
     </ClInclude>
+    <ClInclude Include="Frame.h">
+      <Filter>07. Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>07. Timer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HalliGalliClient.cpp">
@@ -95,6 +104,12 @@
     </ClCompile>
     <ClCompile Include="PictureEx.cpp">
       <Filter>06. PictureEX</Filter>
+    </ClCompile>
+    <ClCompile Include="Frame.cpp">
+      <Filter>07. Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>07. Timer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

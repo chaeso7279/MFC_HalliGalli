@@ -187,6 +187,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Frame.h" />
     <ClInclude Include="HalliGalliServer.h" />
     <ClInclude Include="HalliGalliServerDlg.h" />
     <ClInclude Include="ImageMgr.h" />
@@ -198,8 +199,10 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Frame.cpp" />
     <ClCompile Include="HalliGalliServer.cpp" />
     <ClCompile Include="HalliGalliServerDlg.cpp" />
     <ClCompile Include="ImageMgr.cpp" />
@@ -212,6 +215,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HalliGalliServer.rc" />

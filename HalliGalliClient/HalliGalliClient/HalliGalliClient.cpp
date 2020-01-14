@@ -11,7 +11,7 @@
 #endif
 
 CIntroDlg* g_pIntroDlg = nullptr;
-// CHalliGalliClientApp
+float g_fDeltaTime = 0.f;
 
 BEGIN_MESSAGE_MAP(CHalliGalliClientApp, CWinApp)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
@@ -75,6 +75,8 @@ BOOL CHalliGalliClientApp::InitInstance()
 	// 적절한 내용으로 수정해야 합니다.
 	SetRegistryKey(_T("로컬 응용 프로그램 마법사에서 생성된 응용 프로그램"));
 
+	
+
 	CIntroDlg dlg;
 	m_pMainWnd = &dlg;
 	g_pIntroDlg = &dlg;
@@ -108,5 +110,6 @@ BOOL CHalliGalliClientApp::InitInstance()
 
 	// 대화 상자가 닫혔으므로 응용 프로그램의 메시지 펌프를 시작하지 않고  응용 프로그램을 끝낼 수 있도록 FALSE를
 	// 반환합니다.
+	
 	return FALSE;
 }

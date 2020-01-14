@@ -7,6 +7,9 @@
 #include "SocSvr.h"
 #include "PictureEx.h"
 
+#include "Timer.h"
+#include "Frame.h"
+
 // CHalliGalliServerDlg 대화 상자
 class CHalliGalliServerDlg : public CDialogEx
 {
@@ -38,6 +41,7 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg LPARAM OnAccept(UINT wParam, LPARAM lParam);
 	afx_msg LPARAM OnReceive(UINT wParam, LPARAM lParam);
+	afx_msg LRESULT OnKickIdle(WPARAM wParam, LPARAM lParam); // 루프문
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL DestroyWindow();
@@ -70,6 +74,8 @@ public:
 	void DeleteAllOtherThrownCard();
 
 	void ChangeMyTurn(BOOL bMyTurn);
+
+	BOOL IsGameEnd(); // 게임이 끝났는지 검사하는 함수
 
 public:
 	/* 채팅 관련 함수 */
@@ -105,6 +111,7 @@ public:
 	BOOL m_bTakeCard = FALSE;
 	BOOL m_bMyTurn = FALSE;
 	BOOL m_bOtherBell = FALSE;
+	BOOL m_bWin = FALSE;
 
 	CEdit m_strCardCountNum;
 	CEdit m_strWholeCountNum;
@@ -118,4 +125,10 @@ public:
 	/* 채팅 관련 변수 */
 	CListBox m_list;
 	CString m_strSend;
+
+public:
+	/* 타이머 관련 변수 */
+	CTimer* m_pImmediateTimer = nullptr;
+	CTimer* m_p60Timer = nullptr;
+	CFrame* m_pFrame = nullptr;
 };

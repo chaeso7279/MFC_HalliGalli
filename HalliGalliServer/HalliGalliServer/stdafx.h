@@ -73,6 +73,8 @@ using namespace std;
 #define DEFAULT_IP		"127.0.0.1"
 
 /* ±‚≈∏ */
+#include <afxpriv.h>
+
 #include "Struct.h"
 #include "Macro.h"
 
@@ -84,6 +86,7 @@ using namespace std;
 #define MID_STR		128
 #define MAX_STR		256
 	
+extern float g_fDeltaTime;
 
 #ifdef _CONSOLE
 #pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")

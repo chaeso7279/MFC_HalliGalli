@@ -85,6 +85,7 @@ using namespace std;
 
 #include "ImageMgr.h" // 이미지 관리 클래스
 #include <afxcontrolbars.h>
+#include <afxpriv.h>
 
 class CIntroDlg;
 extern CIntroDlg* g_pIntroDlg;
@@ -94,6 +95,8 @@ extern CIntroDlg* g_pIntroDlg;
 
 #define MID_STR		128
 #define MAX_STR		256
+
+extern float g_fDeltaTime;
 
 //#define _CONSOLE	
 

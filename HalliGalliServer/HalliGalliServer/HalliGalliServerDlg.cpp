@@ -87,6 +87,7 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_MESSAGE(UM_ACCEPT, OnAccept)
 	ON_MESSAGE(UM_RECEIVE, OnReceive)
+	ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnClickedImgPlayerOwn)
 	ON_BN_CLICKED(IDC_BUTTON_SEND, &CHalliGalliServerDlg::OnClickedButtonSend)
 	ON_STN_CLICKED(IDC_IMG_BELL, &CHalliGalliServerDlg::OnClickedImgBell)
@@ -135,6 +136,11 @@ BOOL CHalliGalliServerDlg::OnInitDialog()
 
 	/* 소켓 초기화 */
 	InitSocket();
+
+	/* 타이머 및 프레임 생성 */
+	m_pImmediateTimer = CTimer::Create();
+	m_p60Timer = CTimer::Create();
+	m_pFrame = CFrame::Create(60.f);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -193,6 +199,14 @@ BOOL CHalliGalliServerDlg::DestroyWindow()
 	/* 이미지 매니저 삭제 */
 	CImageMgr::DestroyInstance();
 	m_pImgMgr = nullptr;
+
+	/* 타이머 삭제 */
+	if (m_pImmediateTimer)
+		delete m_pImmediateTimer;
+	if (m_p60Timer)
+		delete m_p60Timer;
+	if (m_pFrame)
+		delete m_pFrame;
 
 	return CDialogEx::DestroyWindow();
 }
@@ -271,6 +285,26 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 	}
 
 	return TRUE;
+}
+
+LRESULT CHalliGalliServerDlg::OnKickIdle(WPARAM wParam, LPARAM lParam)
+{
+	if (m_pImmediateTimer && m_p60Timer && m_pFrame)
+	{
+		m_pImmediateTimer->Update();
+
+		float fDeltaTime = m_pImmediateTimer->Get_DeltaTime();
+
+		if (m_pFrame->Is_PermitCall(fDeltaTime))
+		{
+			m_p60Timer->Update();
+			float fTime60 = m_p60Timer->Get_DeltaTime();
+			g_fDeltaTime = fTime60;
+		}
+
+	}
+
+	return (LRESULT)1;
 }
 
 void CHalliGalliServerDlg::InitSocket()
@@ -527,6 +561,15 @@ void CHalliGalliServerDlg::ChangeMyTurn(BOOL bMyTurn)
 	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(m_bMyTurn);
 
 	UpdateData(FALSE);
+}
+
+BOOL CHalliGalliServerDlg::IsGameEnd()
+{
+	/* 게임이 끝났는지 검사하는 함수 */
+	//if(m_lstMyCard.size() <= 0)
+
+
+	return 0;
 }
 
 void CHalliGalliServerDlg::OnClickedImgPlayerOwn()

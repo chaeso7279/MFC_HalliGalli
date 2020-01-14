@@ -43,7 +43,6 @@ BOOL CRule::OnInitDialog()
 
 	// TODO:  여기에 추가 초기화 작업을 추가합니다.
 	/* 이미지 관리 매니저 초기화 => Image폴더 내의 이미지 로드함 */
-	CImageMgr::GetInstance()->Initialize();
 	CImage* pImage = CImageMgr::GetInstance()->GetImage("rule");
 
 	if(pImage)

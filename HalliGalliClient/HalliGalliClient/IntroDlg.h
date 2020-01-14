@@ -48,6 +48,7 @@ public:
 
 public:
 	CButton m_Radio[RADIO_END];
+	CPictureEx m_LogoPicCtrl;
 
 public:
 	/* 타이머 관련 변수 */

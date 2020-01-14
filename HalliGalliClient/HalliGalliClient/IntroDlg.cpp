@@ -65,6 +65,7 @@ void CIntroDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_RADIO_2P, m_Radio[RADIO_2P]);
 	DDX_Control(pDX, IDC_RADIO_4P, m_Radio[RADIO_4P]);
+	DDX_Control(pDX, IDC_IMG_LOGO, m_LogoPicCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CIntroDlg, CDialogEx)
@@ -121,7 +122,13 @@ BOOL CIntroDlg::OnInitDialog()
 	m_p60Timer = CTimer::Create();
 	m_pFrame = CFrame::Create(60.f);
 
-	
+	/* 이미지 로드 */
+	CImageMgr::GetInstance()->Initialize();
+	CImage* pImage = CImageMgr::GetInstance()->GetImage("Logo");
+
+	if (pImage)
+		m_LogoPicCtrl.SetBitmap(*pImage);
+
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
 

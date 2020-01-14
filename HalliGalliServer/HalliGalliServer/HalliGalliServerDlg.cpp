@@ -280,6 +280,14 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 	case SOC_NOTAKECARD:
 		/* 상대가 벨을 잘못친 경우 */
 		m_bOtherBell = FALSE;
+		strFruitID.Format("%c", (pTemp + 1)[0]);
+		strFruitCnt.Format("%c", (pTemp + 1)[1]);
+
+		tCard.iFruitID = atoi(strFruitID.GetString());
+		tCard.iFruitCnt = atoi(strFruitCnt.GetString());
+
+		m_lstMyCard.push_back(tCard);
+		AfxMessageBox("상대방의 카드를 획득했습니다!");
 		break;
 	case SOC_TEXT:
 		str.Format("%s", pTemp + 1);
@@ -716,6 +724,16 @@ void CHalliGalliServerDlg::OnClickedImgBell()
 	else
 	{
 		// 벨을 잘못 때렸을 경우
-		SendGame(SOC_NOTAKECARD); // 상대에게 벨을 잘못 때렸음을 알림
+		CARD tCard;
+
+		tCard.iFruitID = m_lstMyCard.back().iFruitID;
+		tCard.iFruitCnt = m_lstMyCard.back().iFruitCnt;
+
+		m_lstMyCard.pop_back();
+		AfxMessageBox("종을 잘못쳤내요. 카드 하나를 잃었습니다!");
+		/* 서버에 낸 카드 전달 */
+		char pCardInfo[MID_STR] = "";
+		sprintf_s(pCardInfo, "%d%d", tCard.iFruitID, tCard.iFruitCnt);
+		SendGame(SOC_NOTAKECARD, pCardInfo); // 상대에게 벨을 잘못 때렸음을 알림
 	}
 }

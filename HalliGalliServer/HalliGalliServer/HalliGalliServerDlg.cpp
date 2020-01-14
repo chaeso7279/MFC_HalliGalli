@@ -367,6 +367,9 @@ void CHalliGalliServerDlg::InitSocket()
 void CHalliGalliServerDlg::OnClickedButtonSend()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (!m_bConnect)
+		return;
+
 	UpdateData(TRUE);
 	SendGame(SOC_TEXT, m_strSend);
 
@@ -395,7 +398,7 @@ void CHalliGalliServerDlg::InitPicCtrl()
 	ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 	ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 
-	ChangeArrowImage(USER_PLAYER, TRUE);
+	ChangeArrowImage(USER_PLAYER, FALSE);
 	ChangeArrowImage(USER_OTHER, FALSE);
 
 	CImage* pImage = nullptr;
@@ -808,4 +811,21 @@ void CHalliGalliServerDlg::OnClickedImgBell()
 		m_strCardCountNum.Format("%d", m_lstMyCard.size());
 		UpdateData(FALSE);
 	}
+}
+
+BOOL CHalliGalliServerDlg::PreTranslateMessage(MSG* pMsg)
+{
+	/* 엔터키 종료 X*/
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		if (pMsg->wParam == VK_RETURN) // ENTER키 눌릴 시
+		{
+			OnClickedButtonSend();
+			return TRUE;
+		}
+		else if (pMsg->wParam == VK_ESCAPE) // ESC키 눌릴 시
+			return TRUE;
+	}
+
+	return CDialogEx::PreTranslateMessage(pMsg);
 }

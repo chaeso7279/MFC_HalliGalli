@@ -292,6 +292,9 @@ void CGameDlg::OnClickedImgPlayerOwn()
 void CGameDlg::OnBnClickedButtonSend()
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	if (!m_bConnect)
+		return;
+
 	UpdateData(TRUE);
 	SendGame(SOC_TEXT, m_strSend);
 	
@@ -555,4 +558,21 @@ void CGameDlg::TakeThrownCard()
 	DeleteAllOtherThrownCard();
 	m_strCardCountNum.Format("%d", m_lstMyCard.size());
 	UpdateData(FALSE);
+}
+
+BOOL CGameDlg::PreTranslateMessage(MSG* pMsg)
+{
+	/* 엔터키 종료 X*/
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		if (pMsg->wParam == VK_RETURN) // ENTER키 눌릴 시
+		{
+			OnBnClickedButtonSend();
+			return TRUE;
+		}
+		else if (pMsg->wParam == VK_ESCAPE) // ESC키 눌릴 시
+			return TRUE;
+	}
+
+	return CDialogEx::PreTranslateMessage(pMsg);
 }

@@ -82,6 +82,7 @@ public:
 public:
 	/* 채팅 관련 함수 */
 	afx_msg void OnClickedButtonSend();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
 public:
 	/* 소켓 관련 변수 */

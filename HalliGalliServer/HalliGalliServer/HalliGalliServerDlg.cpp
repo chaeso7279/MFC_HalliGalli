@@ -90,6 +90,7 @@ BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
 	ON_STN_CLICKED(IDC_IMG_PLAYER_OWN, &CHalliGalliServerDlg::OnClickedImgPlayerOwn)
 	ON_BN_CLICKED(IDC_BUTTON_SEND, &CHalliGalliServerDlg::OnClickedButtonSend)
 	ON_STN_CLICKED(IDC_IMG_BELL, &CHalliGalliServerDlg::OnClickedImgBell)
+	
 END_MESSAGE_MAP()
 
 
@@ -272,6 +273,7 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		ChangeMyTurn(TRUE);
 		m_iTurnCnt--;
 		m_strWholeCountNum.Format("%d", m_iTurnCnt);
+		UpdateData(FALSE);
 		break;
 	case SOC_BELL:
 		/* 상대가 벨을 눌렀을 경우 */
@@ -295,11 +297,13 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 
 		m_lstMyCard.push_back(tCard);
 		m_strCardCountNum.Format("%d", m_lstMyCard.size());
+		UpdateData(FALSE);
 		AfxMessageBox("상대방의 카드를 획득했습니다!");
 		break;
 	case SOC_TEXT:
 		str.Format("%s", pTemp + 1);
 		m_list.AddString("(상대방) : " + str);
+	
 		break;
 	case SOC_NOTURN:
 		strOtherCardCnt.Format("%s", pTemp + 1);
@@ -327,8 +331,6 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		m_bGameEnd = TRUE;
 		break;
 	}
-
-	UpdateData(FALSE);
 
 	return TRUE;
 }
@@ -370,7 +372,9 @@ void CHalliGalliServerDlg::OnClickedButtonSend()
 
 	m_list.AddString("   (나) : " + m_strSend);
 	m_strSend = (_T(""));
+	
 	UpdateData(FALSE);
+	
 }
 
 void CHalliGalliServerDlg::SendGame(int iType, CString strTemp)

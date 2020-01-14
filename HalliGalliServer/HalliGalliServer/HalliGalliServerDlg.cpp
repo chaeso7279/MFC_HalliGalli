@@ -488,16 +488,44 @@ void CHalliGalliServerDlg::SendCardToClient()
 
 void CHalliGalliServerDlg::CheckThrownCard()
 {
+
 	int iMyFruitCnt = 0;
 	int iOtherFruitCnt = 0;
 
+	int iMyFruitID = FRUIT_END;
+	int iOhtherFruitID = FRUIT_END;
+
 	if (!m_lstMyThrownCard.empty())
+	{
 		iMyFruitCnt = m_lstMyThrownCard.back().iFruitCnt;
+		iMyFruitID = m_lstMyThrownCard.back().iFruitID;
+	}
+
 	if (!m_lstOtherThrownCard.empty())
+	{
 		iOtherFruitCnt = m_lstOtherThrownCard.back().iFruitCnt;
-	
-	if (iMyFruitCnt + iOtherFruitCnt == 5)
-		m_bTakeCard = TRUE;
+		iOhtherFruitID = m_lstOtherThrownCard.back().iFruitID;
+	}
+
+	if (iMyFruitID != FRUIT_END && iOhtherFruitID != FRUIT_END)
+	{
+		/* 서로 과일의 종류가 같을 때 */
+		if (iMyFruitID == iOhtherFruitID)
+		{
+			if (iMyFruitCnt + iOtherFruitCnt == 5)
+				m_bTakeCard = TRUE;
+			else
+				m_bTakeCard = FALSE;
+		}
+		else
+		{
+			/* 서로 과일의 종류가 다를 때 */
+			if (iMyFruitCnt == 5 || iOtherFruitCnt == 5)
+				m_bTakeCard = TRUE;
+			else
+				m_bTakeCard = FALSE;
+		}
+	}
 	else
 		m_bTakeCard = FALSE;
 }
@@ -580,12 +608,12 @@ void CHalliGalliServerDlg::ChangeMyTurn(BOOL bMyTurn)
 
 void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
 {
-	if (iOtherCnt > m_lstMyCard.size()) // 상대의 카드가 나보다 많을 때
+	if (iOtherCnt > int(m_lstMyCard.size())) // 상대의 카드가 나보다 많을 때
 	{
 		m_bWin = FALSE;
 		AfxMessageBox("패배했습니다");
 	}
-	else if (iOtherCnt < m_lstMyCard.size())
+	else if (iOtherCnt <  int(m_lstMyCard.size()))
 	{
 		m_bWin = TRUE;
 		AfxMessageBox("승리했습니다");

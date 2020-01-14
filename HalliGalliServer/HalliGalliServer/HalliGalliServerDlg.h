@@ -55,7 +55,8 @@ public:
 	/* 이미지 관련 함수 */
 	void InitPicCtrl();
 	void ChangeCardImage(const USER_ID& eID, const CARD_STATUS& eStatus = THROWN, const CARD& tCard = { FRUIT_BACK, 1 });
-	
+	void ChangeArrowImage(const USER_ID& eID, const BOOL& bTurn);
+
 	afx_msg void OnClickedImgPlayerOwn();
 	afx_msg void OnClickedImgBell();
 
@@ -93,6 +94,7 @@ public:
 	/* 이미지 관련 변수 */
 	CPictureEx m_BellPicCtrl; // 종 이미지 컨트롤
 	CPictureEx m_CardPicCtrl[USER_END][CARD_END]; 	// 카드 이미지 컨트롤
+	CPictureEx m_ArrowPicCtrl[USER_END]; // 화살표 이미지 컨트롤 
 
 	CImageMgr* m_pImgMgr = nullptr; // 이미지 매니저 포인터 변수
 	

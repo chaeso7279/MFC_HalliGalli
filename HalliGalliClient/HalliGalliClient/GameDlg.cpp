@@ -212,6 +212,9 @@ void CGameDlg::InitPicCtrl()
 
 	ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 	ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
+	
+	ChangeArrowImage(USER_PLAYER, FALSE);
+	ChangeArrowImage(USER_OTHER, TRUE);
 
 	CImage* pImage = nullptr;
 
@@ -231,6 +234,23 @@ void CGameDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATUS & eStatus,
 	}
 }
 
+void CGameDlg::ChangeArrowImage(const USER_ID & eID, const BOOL & bTurn)
+{
+	CImage* pImage = nullptr;
+	CString strImgName;
+
+	if (bTurn)
+		strImgName = "Arrow_True";
+	else
+		strImgName = "Arrow_False";
+		
+	pImage = m_pImgMgr->GetImage(strImgName);
+	if (pImage != nullptr)
+	{
+		m_ArrowPicCtrl[eID].SetBitmap(*pImage);
+		Invalidate(TRUE);
+	}
+}
 
 void CGameDlg::OnClickedImgPlayerOwn()
 {
@@ -371,6 +391,9 @@ void CGameDlg::ChangeMyTurn(BOOL bMyTurn)
 		m_strMe = "당신의 차례입니다";
 	else
 		m_strMe = "상대방의 차례입니다";
+
+	ChangeArrowImage(USER_PLAYER, m_bMyTurn);
+	ChangeArrowImage(USER_OTHER, !m_bMyTurn);
 
 	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(m_bMyTurn);
 

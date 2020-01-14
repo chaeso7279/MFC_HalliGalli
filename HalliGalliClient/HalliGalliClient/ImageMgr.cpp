@@ -51,7 +51,7 @@ void CImageMgr::Initialize()
 	Load_Image();
 	Load_CardImage("../../Image/Card/");
 
-	AfxMessageBox("이미지 로드 성공");
+	//AfxMessageBox("이미지 로드 성공");
 }
 
 void CImageMgr::Load_Image()

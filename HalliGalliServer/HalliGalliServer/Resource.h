@@ -23,6 +23,8 @@
 #define IDC_IMG_OTHER_THROWN            1015
 #define IDC_IMG_PLAYER_THROWN           1016
 #define IDC_IMG_PLAYER_OWN              1017
+#define IDC_IMG_MYARROW                 1025
+#define IDC_IMG_OTHERARROW              1026
 
 // Next default values for new objects
 // 

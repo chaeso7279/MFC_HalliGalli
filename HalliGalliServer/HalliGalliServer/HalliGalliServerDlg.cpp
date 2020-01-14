@@ -76,6 +76,8 @@ void CHalliGalliServerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_SEND, m_strSend);
 	DDX_Text(pDX, IDC_WHOLECOUNTNUM, m_strWholeCountNum);
 	DDX_Text(pDX, IDC_CARDCOUNTNUM, m_strCardCountNum);
+	DDX_Control(pDX, IDC_IMG_MYARROW, m_ArrowPicCtrl[USER_PLAYER]);
+	DDX_Control(pDX, IDC_IMG_OTHERARROW, m_ArrowPicCtrl[USER_OTHER]);
 }
 
 BEGIN_MESSAGE_MAP(CHalliGalliServerDlg, CDialogEx)
@@ -389,6 +391,9 @@ void CHalliGalliServerDlg::InitPicCtrl()
 	ChangeCardImage(USER_PLAYER, THROWN, CARD(FRUIT_BACK, 2));
 	ChangeCardImage(USER_OTHER, THROWN, CARD(FRUIT_BACK, 2));
 
+	ChangeArrowImage(USER_PLAYER, TRUE);
+	ChangeArrowImage(USER_OTHER, FALSE);
+
 	CImage* pImage = nullptr;
 
 	pImage = m_pImgMgr->GetImage("Bell");
@@ -404,8 +409,25 @@ void CHalliGalliServerDlg::ChangeCardImage(const USER_ID & eID, const CARD_STATU
 	{
 		m_CardPicCtrl[eID][eStatus].SetBitmap(*pImage);
 		Invalidate(TRUE);
+	}	
+}
+
+void CHalliGalliServerDlg::ChangeArrowImage(const USER_ID & eID, const BOOL & bTurn)
+{
+	CImage* pImage = nullptr;
+	CString strImgName;
+
+	if (bTurn)
+		strImgName = "Arrow_True";
+	else
+		strImgName = "Arrow_False";
+
+	pImage = m_pImgMgr->GetImage(strImgName);
+	if (pImage != nullptr)
+	{
+		m_ArrowPicCtrl[eID].SetBitmap(*pImage);
+		Invalidate(TRUE);
 	}
-		
 }
 
 void CHalliGalliServerDlg::InitCardDeck()
@@ -634,6 +656,9 @@ void CHalliGalliServerDlg::ChangeMyTurn(BOOL bMyTurn)
 		m_strMe = "당신의 차례입니다";
 	else
 		m_strMe = "상대방의 차례입니다";
+
+	ChangeArrowImage(USER_PLAYER, m_bMyTurn);
+	ChangeArrowImage(USER_OTHER, !m_bMyTurn);
 
 	GetDlgItem(IDC_IMG_PLAYER_OWN)->EnableWindow(m_bMyTurn);
 

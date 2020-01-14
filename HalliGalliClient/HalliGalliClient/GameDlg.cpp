@@ -193,7 +193,6 @@ void CGameDlg::InitSocket(CSocCom * pSocCom)
 	m_pSocCom->Init(this->m_hWnd);
 
 	m_bConnect = TRUE;
-	//InitGame(); // 서버와 연결 후 게임 초기화
 }
 
 void CGameDlg::SendGame(int iType, CString strTemp)

@@ -243,12 +243,14 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 	CString strOtherCardCnt;
 	CString strCardCnt;
 
+	CString strGameEvent;
+
 	int iOtherCardCnt = 0;
+	int iEvent = 0;
 
 	CARD tCard;
 
 	m_strWholeCountNum.Format("%d", m_iTurnCnt);
-
 
 	switch (iType)
 	{
@@ -298,16 +300,28 @@ LPARAM CHalliGalliServerDlg::OnReceive(UINT wParam, LPARAM lParam)
 		m_list.AddString("(상대방) : " + str);
 		break;
 	case SOC_NOTURN:
-		strCardCnt.Format("%d", m_lstMyCard.size());
-		SendGame(SOC_NOTURN, strCardCnt);
-
 		strOtherCardCnt.Format("%s", pTemp + 1);
 		iOtherCardCnt = atoi(strOtherCardCnt.GetString());
-		
 		CheckWin(iOtherCardCnt);
 		break;
 	case SOC_GAMEEND:
-		AfxMessageBox("승리했습니다!!");
+		strGameEvent.Format("%s", pTemp + 1);
+		iEvent = atoi(strGameEvent.GetString());
+		switch (iEvent)
+		{
+		case GAME_WIN:
+			/* 상대가 이김 */
+			AfxMessageBox("패배했습니다");
+			break;
+		case GAME_LOSE:
+			/* 상대가 짐 */
+			AfxMessageBox("승리했습니다");
+			break;
+		case GAME_DRAW:
+			/* 무승부 */
+			AfxMessageBox("무승부입니다");
+			break;
+		}
 		m_bGameEnd = TRUE;
 		break;
 	}
@@ -628,19 +642,27 @@ void CHalliGalliServerDlg::ChangeMyTurn(BOOL bMyTurn)
 
 void CHalliGalliServerDlg::CheckWin(const int & iOtherCnt)
 {
+	CString strEvent;
+
 	if (iOtherCnt > int(m_lstMyCard.size())) // 상대의 카드가 나보다 많을 때
 	{
 		m_bWin = FALSE;
+		strEvent.Format("%d", GAME_LOSE);
+		SendGame(SOC_GAMEEND, strEvent);
 		AfxMessageBox("패배했습니다");
 	}
-	else if (iOtherCnt <  int(m_lstMyCard.size()))
+	else if (iOtherCnt < int(m_lstMyCard.size()))
 	{
 		m_bWin = TRUE;
+		strEvent.Format("%d", GAME_WIN);
+		SendGame(SOC_GAMEEND, strEvent);
 		AfxMessageBox("승리했습니다");
 	}
 	else
 	{
 		m_bWin = FALSE;
+		strEvent.Format("%d", GAME_DRAW);
+		SendGame(SOC_GAMEEND, strEvent);
 		AfxMessageBox("무승부입니다");
 	}
 
@@ -653,9 +675,11 @@ BOOL CHalliGalliServerDlg::IsGameEnd()
 	if (m_lstMyCard.size() <= 0) // 내가 가진 카드가 없을 때
 	{
 		m_bWin = FALSE;
-		SendGame(SOC_GAMEEND);
-
 		AfxMessageBox("패배했습니다");
+
+		CString strEvent;
+		strEvent.Format("%d", GAME_LOSE);
+		SendGame(SOC_GAMEEND, strEvent);
 
 		m_bGameEnd = TRUE;
 
@@ -668,7 +692,7 @@ BOOL CHalliGalliServerDlg::IsGameEnd()
 		strCardCnt.Format("%d", m_lstMyCard.size());
 
 		SendGame(SOC_NOTURN, strCardCnt);
-
+		
 		return TRUE;
 	}
 

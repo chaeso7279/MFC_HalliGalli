@@ -62,7 +62,7 @@ using namespace std;
 // 이벤트 처리 
 #define SOC_INITGAME		0	// 전송 데이터: 나눠줄 카드 데이터(CARD 구조체 데이터)
 #define SOC_GAMESTART		1	// 전송 데이터: X
-#define SOC_GAMEEND			2	// 전송 데이터: X
+#define SOC_GAMEEND			2	// 전송 데이터: 상대의 승패 여부
 #define SOC_TEXT			3	// 전송 데이터: 보내는 문자열(m_strSend)
 #define SOC_THROWNCARD		4	// 전송 데이터: 내는 카드
 #define SOC_BELL			5	// 전송 데이터: X
@@ -84,7 +84,11 @@ using namespace std;
 #define CARD_CNT 28
 #define CARD_HALF_CNT 14
 
-#define TURN_CNT	10
+#define TURN_CNT	50
+
+#define GAME_WIN	0	// 상대가 이김	
+#define GAME_LOSE	1	// 상대가 짐
+#define GAME_DRAW	2	// 무승부
 
 #define MID_STR		128
 #define MAX_STR		256
